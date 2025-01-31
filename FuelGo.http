@@ -1,0 +1,6 @@
+@FuelGo_HostAddress = http://localhost:5228
+
+GET {{FuelGo_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
