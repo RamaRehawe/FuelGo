@@ -4,23 +4,23 @@
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public string Order_Number { get; set; }
+        public string OrderNumber { get; set; }
         public double Lat { get; set; }
         public double Long { get; set; }
-        public string Location_Description { get; set; }
-        public int Neighborhood_Id { get; set; }
-        public int Fuel_Type_Id { get; set; }
-        public double Ordered_Quantity { get; set; }
-        public double? Final_Quantity { get; set; } // Nullable
-        public double? Final_Price { get; set; } // Nullable
-        public bool Is_It_Urgent { get; set; }
-        public int? Customer_Car_Id { get; set; } // Nullable
-        public int? Customer_Apartment_Id { get; set; } // Nullable
-        public int Customer_Id { get; set; }
-        public int? Driver_Id { get; set; } // Nullable
-        public int Status_Id { get; set; }
-        public bool? Is_Active { get; set; } // Nullable
-        public string Auth_Code { get; set; }
+        public string LocationDescription { get; set; }
+        public int NeighborhoodId { get; set; }
+        public int FuelTypeId { get; set; }
+        public double OrderedQuantity { get; set; }
+        public double? FinalQuantity { get; set; } // Nullable
+        public double? FinalPrice { get; set; } // Nullable
+        public bool IsItUrgent { get; set; }
+        public int? CustomerCarId { get; set; } // Nullable
+        public int? CustomerApartmentId { get; set; } // Nullable
+        public int CustomerId { get; set; }
+        public int? DriverId { get; set; } // Nullable
+        public int StatusId { get; set; }
+        public bool? IsActive { get; set; } // Nullable
+        public string AuthCode { get; set; }
         public Neighborhood Neighborhood { get; set; }
         public FuelType FuelType { get; set; }
         public CustomerCar CustomerCar { get; set; }

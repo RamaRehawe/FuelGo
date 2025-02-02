@@ -3,7 +3,7 @@
     public class Neighborhood
     {
         public int Id { get; set; }
-        public int City_Id { get; set; }
+        public int CityId { get; set; }
         public string Name { get; set; }
         public City City { get; set; }
         public ICollection<Center> Centers { get; set; }

@@ -3,7 +3,7 @@
     public class GasStation
     {
         public int Id { get; set; }
-        public int Neighborhood_Id { get; set; }
+        public int NeighborhoodId { get; set; }
         public string Name { get; set; }
         public double Lat { get; set; }
         public double Long { get; set; }

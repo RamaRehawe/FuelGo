@@ -3,11 +3,11 @@
     public class Shift
     {
         public int Id { get; set; }
-        public string Shift_Name { get; set; } 
-        public double Start_Time { get; set; }
-        public double End_Time { get; set; }
-        public string? Working_Days { get; set; }
-        public string? Holiday_Days { get; set; }
+        public string ShiftName { get; set; } 
+        public double StartTime { get; set; }
+        public double EndTime { get; set; }
+        public string? WorkingDays { get; set; }
+        public string? HolidayDays { get; set; }
         public ICollection<Driver> Drivers { get; set; }
     }
 }
