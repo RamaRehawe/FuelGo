@@ -61,6 +61,9 @@ namespace FuelGo.Data
                 .HasIndex(d => new { d.TruckId, d.ShiftId })
                 .IsUnique();
             modelBuilder.Entity<Driver>()
+                .HasIndex(d => new { d.TruckId, d.IsDriving })
+                .IsUnique();
+            modelBuilder.Entity<Driver>()
                 .HasIndex(d => d.UserId)
                 .IsUnique();
 
@@ -167,8 +170,6 @@ namespace FuelGo.Data
                 .WithOne(w => w.User)
                 .HasForeignKey<Wallet>(w => w.UserId);
 
-
-
             // one to many
             modelBuilder.Entity<Admin>()
                 .HasOne(a => a.Center)
@@ -240,11 +241,6 @@ namespace FuelGo.Data
                 .HasOne(t => t.Center)
                 .WithMany(c => c.Trucks)
                 .HasForeignKey(t => t.CenterId);
-
-            modelBuilder.Entity<Truck>()
-                .HasOne(t => t.Driver)
-                .WithMany(d => d.Trucks)
-                .HasForeignKey(t => t.DriverId);
 
             modelBuilder.Entity<Truck>()
                 .HasOne(t => t.FuelType)

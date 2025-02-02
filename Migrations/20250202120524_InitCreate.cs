@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FuelGo.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -417,6 +417,40 @@ namespace FuelGo.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Trucks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CenterId = table.Column<int>(type: "int", nullable: false),
+                    PlateNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Lat = table.Column<double>(type: "float", nullable: false),
+                    Long = table.Column<double>(type: "float", nullable: false),
+                    FuelTankCapacity = table.Column<double>(type: "float", nullable: false),
+                    CargoTankCapacity = table.Column<double>(type: "float", nullable: false),
+                    FuelTankFullCapacity = table.Column<double>(type: "float", nullable: false),
+                    CargoTankFullCapacity = table.Column<double>(type: "float", nullable: false),
+                    FuelTankTypeId = table.Column<int>(type: "int", nullable: false),
+                    CargoTankTypeId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Trucks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Trucks_Centers_CenterId",
+                        column: x => x.CenterId,
+                        principalTable: "Centers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Trucks_FuelTypes_CargoTankTypeId",
+                        column: x => x.CargoTankTypeId,
+                        principalTable: "FuelTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Drivers",
                 columns: table => new
                 {
@@ -426,7 +460,9 @@ namespace FuelGo.Migrations
                     ShiftId = table.Column<int>(type: "int", nullable: true),
                     StatusId = table.Column<int>(type: "int", nullable: false),
                     TruckId = table.Column<int>(type: "int", nullable: true),
-                    CenterId = table.Column<int>(type: "int", nullable: false)
+                    CenterId = table.Column<int>(type: "int", nullable: false),
+                    IsDriving = table.Column<bool>(type: "bit", nullable: true),
+                    TruckId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -448,6 +484,16 @@ namespace FuelGo.Migrations
                         principalTable: "Statuses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Drivers_Trucks_TruckId",
+                        column: x => x.TruckId,
+                        principalTable: "Trucks",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Drivers_Trucks_TruckId1",
+                        column: x => x.TruckId1,
+                        principalTable: "Trucks",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Drivers_Users_UserId",
                         column: x => x.UserId,
@@ -521,46 +567,6 @@ namespace FuelGo.Migrations
                         name: "FK_Orders_Statuses_StatusId",
                         column: x => x.StatusId,
                         principalTable: "Statuses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Trucks",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CenterId = table.Column<int>(type: "int", nullable: false),
-                    PlateNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DriverId = table.Column<int>(type: "int", nullable: true),
-                    Lat = table.Column<double>(type: "float", nullable: false),
-                    Long = table.Column<double>(type: "float", nullable: false),
-                    FuelTankCapacity = table.Column<double>(type: "float", nullable: false),
-                    CargoTankCapacity = table.Column<double>(type: "float", nullable: false),
-                    FuelTankFullCapacity = table.Column<double>(type: "float", nullable: false),
-                    CargoTankFullCapacity = table.Column<double>(type: "float", nullable: false),
-                    FuelTankTypeId = table.Column<int>(type: "int", nullable: false),
-                    CargoTankTypeId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Trucks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Trucks_Centers_CenterId",
-                        column: x => x.CenterId,
-                        principalTable: "Centers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Trucks_Drivers_DriverId",
-                        column: x => x.DriverId,
-                        principalTable: "Drivers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Trucks_FuelTypes_CargoTankTypeId",
-                        column: x => x.CargoTankTypeId,
-                        principalTable: "FuelTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -723,11 +729,25 @@ namespace FuelGo.Migrations
                 column: "StatusId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Drivers_TruckId_IsDriving",
+                table: "Drivers",
+                columns: new[] { "TruckId", "IsDriving" },
+                unique: true,
+                filter: "[TruckId] IS NOT NULL AND [IsDriving] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Drivers_TruckId_ShiftId",
                 table: "Drivers",
                 columns: new[] { "TruckId", "ShiftId" },
                 unique: true,
                 filter: "[TruckId] IS NOT NULL AND [ShiftId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Drivers_TruckId1",
+                table: "Drivers",
+                column: "TruckId1",
+                unique: true,
+                filter: "[TruckId1] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Drivers_UserId",
@@ -848,11 +868,6 @@ namespace FuelGo.Migrations
                 column: "CenterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Trucks_DriverId",
-                table: "Trucks",
-                column: "DriverId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Trucks_PlateNumber",
                 table: "Trucks",
                 column: "PlateNumber",
@@ -902,42 +917,11 @@ namespace FuelGo.Migrations
                 name: "IX_WalletTransactions_WalletId",
                 table: "WalletTransactions",
                 column: "WalletId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Drivers_Trucks_TruckId",
-                table: "Drivers",
-                column: "TruckId",
-                principalTable: "Trucks",
-                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Drivers_Centers_CenterId",
-                table: "Drivers");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Trucks_Centers_CenterId",
-                table: "Trucks");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Drivers_Statuses_StatusId",
-                table: "Drivers");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Drivers_Users_UserId",
-                table: "Drivers");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Drivers_Shifts_ShiftId",
-                table: "Drivers");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Drivers_Trucks_TruckId",
-                table: "Drivers");
-
             migrationBuilder.DropTable(
                 name: "CenterServices");
 
@@ -972,6 +956,9 @@ namespace FuelGo.Migrations
                 name: "Admins");
 
             migrationBuilder.DropTable(
+                name: "Drivers");
+
+            migrationBuilder.DropTable(
                 name: "GasStations");
 
             migrationBuilder.DropTable(
@@ -981,34 +968,31 @@ namespace FuelGo.Migrations
                 name: "Customers");
 
             migrationBuilder.DropTable(
+                name: "Shifts");
+
+            migrationBuilder.DropTable(
+                name: "Statuses");
+
+            migrationBuilder.DropTable(
+                name: "Trucks");
+
+            migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "StatusTypes");
+
+            migrationBuilder.DropTable(
                 name: "Centers");
+
+            migrationBuilder.DropTable(
+                name: "FuelTypes");
 
             migrationBuilder.DropTable(
                 name: "Neighborhoods");
 
             migrationBuilder.DropTable(
                 name: "Cities");
-
-            migrationBuilder.DropTable(
-                name: "Statuses");
-
-            migrationBuilder.DropTable(
-                name: "StatusTypes");
-
-            migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Shifts");
-
-            migrationBuilder.DropTable(
-                name: "Trucks");
-
-            migrationBuilder.DropTable(
-                name: "Drivers");
-
-            migrationBuilder.DropTable(
-                name: "FuelTypes");
         }
     }
 }
