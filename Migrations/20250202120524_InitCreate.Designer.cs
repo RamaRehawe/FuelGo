@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FuelGo.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250202052005_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250202120524_InitCreate")]
+    partial class InitCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -279,6 +279,9 @@ namespace FuelGo.Migrations
                     b.Property<int>("CenterId")
                         .HasColumnType("int");
 
+                    b.Property<bool?>("IsDriving")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("ShiftId")
                         .HasColumnType("int");
 
@@ -286,6 +289,9 @@ namespace FuelGo.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("TruckId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TruckId1")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
@@ -299,8 +305,16 @@ namespace FuelGo.Migrations
 
                     b.HasIndex("StatusId");
 
+                    b.HasIndex("TruckId1")
+                        .IsUnique()
+                        .HasFilter("[TruckId1] IS NOT NULL");
+
                     b.HasIndex("UserId")
                         .IsUnique();
+
+                    b.HasIndex("TruckId", "IsDriving")
+                        .IsUnique()
+                        .HasFilter("[TruckId] IS NOT NULL AND [IsDriving] IS NOT NULL");
 
                     b.HasIndex("TruckId", "ShiftId")
                         .IsUnique()
@@ -615,9 +629,6 @@ namespace FuelGo.Migrations
                     b.Property<int>("CenterId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DriverId")
-                        .HasColumnType("int");
-
                     b.Property<double>("FuelTankCapacity")
                         .HasColumnType("float");
 
@@ -642,8 +653,6 @@ namespace FuelGo.Migrations
                     b.HasIndex("CargoTankTypeId");
 
                     b.HasIndex("CenterId");
-
-                    b.HasIndex("DriverId");
 
                     b.HasIndex("PlateNumber")
                         .IsUnique();
@@ -948,6 +957,10 @@ namespace FuelGo.Migrations
                         .WithMany("Drivers")
                         .HasForeignKey("TruckId");
 
+                    b.HasOne("FuelGo.Models.Truck", null)
+                        .WithOne("Driver")
+                        .HasForeignKey("FuelGo.Models.Driver", "TruckId1");
+
                     b.HasOne("FuelGo.Models.User", "User")
                         .WithOne("Driver")
                         .HasForeignKey("FuelGo.Models.Driver", "UserId")
@@ -1095,13 +1108,7 @@ namespace FuelGo.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FuelGo.Models.Driver", "Driver")
-                        .WithMany("Trucks")
-                        .HasForeignKey("DriverId");
-
                     b.Navigation("Center");
-
-                    b.Navigation("Driver");
 
                     b.Navigation("FuelType");
                 });
@@ -1239,8 +1246,6 @@ namespace FuelGo.Migrations
                     b.Navigation("TruckHandovers");
 
                     b.Navigation("TruckTankRefills");
-
-                    b.Navigation("Trucks");
                 });
 
             modelBuilder.Entity("FuelGo.Models.FuelType", b =>
@@ -1291,6 +1296,9 @@ namespace FuelGo.Migrations
 
             modelBuilder.Entity("FuelGo.Models.Truck", b =>
                 {
+                    b.Navigation("Driver")
+                        .IsRequired();
+
                     b.Navigation("Drivers");
 
                     b.Navigation("TruckHandovers");

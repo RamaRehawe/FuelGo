@@ -5,7 +5,6 @@
         public int Id { get; set; }
         public int CenterId { get; set; }
         public string PlateNumber { get; set; }
-        public int? DriverId { get; set; } // Nullable, as Driver_Id can be null
         public double Lat { get; set; }
         public double Long { get; set; }
         public double FuelTankCapacity { get; set; }
