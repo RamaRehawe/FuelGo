@@ -7,18 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\**" />
     <Compile Remove="Interfaces\**" />
-    <Compile Remove="Repository\**" />
-    <Content Remove="Controllers\**" />
     <Content Remove="Interfaces\**" />
-    <Content Remove="Repository\**" />
-    <EmbeddedResource Remove="Controllers\**" />
     <EmbeddedResource Remove="Interfaces\**" />
-    <EmbeddedResource Remove="Repository\**" />
-    <None Remove="Controllers\**" />
     <None Remove="Interfaces\**" />
-    <None Remove="Repository\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +24,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Inerfaces\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Repository\" />
   </ItemGroup>
 
 </Project>
