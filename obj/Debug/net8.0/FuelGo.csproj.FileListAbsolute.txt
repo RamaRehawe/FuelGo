@@ -172,3 +172,8 @@ C:\FuelGo\FuelGo\obj\Debug\net8.0\FuelGo.pdb
 C:\FuelGo\FuelGo\obj\Debug\net8.0\FuelGo.genruntimeconfig.cache
 C:\FuelGo\FuelGo\obj\Debug\net8.0\ref\FuelGo.dll
 C:\FuelGo\FuelGo\bin\Debug\net8.0\AutoMapper.dll
+C:\FuelGo\FuelGo\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\FuelGo\FuelGo\bin\Debug\net8.0\Microsoft.Bcl.Memory.dll
+C:\FuelGo\FuelGo\bin\Debug\net8.0\Microsoft.Owin.dll
+C:\FuelGo\FuelGo\bin\Debug\net8.0\Microsoft.Owin.Host.SystemWeb.dll
+C:\FuelGo\FuelGo\bin\Debug\net8.0\Owin.dll
