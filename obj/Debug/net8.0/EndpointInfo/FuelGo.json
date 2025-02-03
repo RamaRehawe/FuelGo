@@ -5,7 +5,7 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/Customer": {
+    "/api/Customer/Register": {
       "post": {
         "tags": [
           "Customer"

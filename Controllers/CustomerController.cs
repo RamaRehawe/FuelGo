@@ -18,7 +18,7 @@ namespace FuelGo.Controllers
             _customerRepository = customerRepository;
             _mapper = mapper;
         }
-        [HttpPost]
+        [HttpPost("Register")]
         [ProducesResponseType(201, Type = typeof(ResRegisterCustomerDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(409)]

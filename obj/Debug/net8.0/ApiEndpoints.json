@@ -2,7 +2,7 @@
   {
     "ContainingType": "FuelGo.Controllers.CustomerController",
     "Method": "RegisterCustomer",
-    "RelativePath": "api/Customer",
+    "RelativePath": "api/Customer/Register",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
