@@ -28,7 +28,7 @@ namespace FuelGo.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpPost("customer_login")]
+        [HttpPost("customer-login")]
         [AllowAnonymous]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
