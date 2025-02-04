@@ -36,6 +36,7 @@ namespace FuelGo.Controllers
             }
             var customerMap = _mapper.Map<User>(register);
             customerMap.CreatedAt = DateTime.Now;
+            customerMap.Role = "Customer";
             if(!_customerRepository.RegisterCustomer(customerMap))
             {
                 ModelState.AddModelError("", "Somthing went wrong while saving");

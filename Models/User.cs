@@ -11,6 +11,7 @@
         public DateTime CreatedAt { get; set; } 
         public bool? IsNotDeleted { get; set; }
         public string? JwtToken { get; set; }
+        public string Role { get; set; } // Admin - SystemAdmin - Driver - Customer
         public SystemAdmin SystemAdmin { get; set; }
         public Admin Admin { get; set; }
         public Driver Driver { get; set; }
