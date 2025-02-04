@@ -171,3 +171,4 @@ C:\FuelGo\FuelGo\obj\Debug\net8.0\refint\FuelGo.dll
 C:\FuelGo\FuelGo\obj\Debug\net8.0\FuelGo.pdb
 C:\FuelGo\FuelGo\obj\Debug\net8.0\FuelGo.genruntimeconfig.cache
 C:\FuelGo\FuelGo\obj\Debug\net8.0\ref\FuelGo.dll
+C:\FuelGo\FuelGo\bin\Debug\net8.0\AutoMapper.dll
