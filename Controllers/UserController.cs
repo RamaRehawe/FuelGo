@@ -28,22 +28,22 @@ namespace FuelGo.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpPost("customer-login")]
-        [AllowAnonymous]
+        [HttpPost("login")]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> LoginAsync(ReqLoginDto loginDto)
+        public async Task<IActionResult> Login(ReqLoginDto loginDto)
         {
             var user = _userRepository.GetUserByPhone(loginDto.Phone);
             if (user == null || user.Password != loginDto.Password)
-                return Unauthorized("Invalid Username or Password");
+                return Unauthorized("Invalid Phone or Password");
             // Generate JWT token
-            var token = GenerateJwtToken(user.Phone, "Customer");
+            var token = GenerateJwtToken(user.Phone, user.Role);
             // Update the token for the user in the database
             await _userRepository.UpdateTokenByPhoneAsync(user.Phone, token);
             // Return the token in the response
-            return Ok(new { Token = token, UserId = user.Id });
+            return Ok(new { Token = token });
         }
+
 
         private string GenerateJwtToken(string username, string role)
         {
