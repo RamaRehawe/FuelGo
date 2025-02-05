@@ -19,6 +19,12 @@ namespace FuelGo.Repository
             return Save();
         }
 
+        public bool AddTruck(Truck truck)
+        {
+            _context.Add(truck);
+            return Save();
+        }
+
         public Center GetCenterByAdminId(int adminId)
         {
             var admin = _context.Admins.Where(a => a.UserId == adminId).FirstOrDefault();

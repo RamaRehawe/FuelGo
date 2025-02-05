@@ -72,6 +72,31 @@ namespace FuelGo.Controllers
             return Ok("Successfully added");
 
         }
-            
+
+        [HttpPost("add-truck")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(201)]
+        public IActionResult AddTruck(ReqTruckAddingDto truckData)
+        {
+            if (truckData == null)
+                return BadRequest(ModelState);
+            var newTruck = _adminRepository.GetTrucks().
+                Where(t => t.PlateNumber == truckData.PlateNumber).FirstOrDefault();
+            if(newTruck != null)
+            {
+                ModelState.AddModelError("", "Truck allready exists");
+                return StatusCode(422, ModelState);
+            }
+            var truckMap = _mapper.Map<Truck>(truckData);
+            var adminId = base.GetActiveUser().Id;
+            var center = _adminRepository.GetCenterByAdminId(adminId);
+            truckMap.CenterId = center.Id;
+            if(!_adminRepository.AddTruck(truckMap))
+            {
+                ModelState.AddModelError("", "Somthing went wrong while saving");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Added Successfully");
+        }
     }
 }

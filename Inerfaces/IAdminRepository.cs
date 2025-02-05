@@ -9,5 +9,6 @@ namespace FuelGo.Inerfaces
         ICollection<Shift> GetShifts();
         ICollection<Truck> GetTrucks();
         Driver GetDriverByUserId(int id);
+        bool AddTruck(Truck truck);
     }
 }
