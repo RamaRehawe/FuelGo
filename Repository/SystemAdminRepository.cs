@@ -19,9 +19,20 @@ namespace FuelGo.Repository
             return Save();
         }
 
+        public bool AddCenter(Center center)
+        {
+            _context.Add(center);
+            return Save();
+        }
+
         public Admin GetAdminById(int id)
         {
             return _context.Admins.Where(a => a.UserId == id).FirstOrDefault();
+        }
+
+        public ICollection<Center> GetCenters()
+        {
+            return _context.Centers.OrderBy(c => c.Id).ToList();
         }
     }
 }
