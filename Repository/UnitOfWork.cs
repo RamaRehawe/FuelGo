@@ -8,6 +8,8 @@ namespace FuelGo.Repository
         public IAdminRepository _adminRepository { get; set; }
         public ICustomerRepository _customerRepository { get; set; }
         public IUserRepository _userRepository { get; set; }
+        public ISystemAdminRepository _systemAdminRepository { get; set; }
+
         protected readonly DataContext _context;
         public UnitOfWork(DataContext context)
         {
@@ -15,6 +17,7 @@ namespace FuelGo.Repository
             _adminRepository = new AdminRepository(context);
             _customerRepository = new CustomerRepository(context);
             _userRepository = new UserRepository(context);
+            _systemAdminRepository = new SystemAdminRepository(context);
         }
         public bool Save()
         {

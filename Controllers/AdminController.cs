@@ -3,6 +3,7 @@ using FuelGo.Dto;
 using FuelGo.Inerfaces;
 using FuelGo.Models;
 using FuelGo.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FuelGo.Controllers
@@ -22,6 +23,7 @@ namespace FuelGo.Controllers
         }
 
         [HttpPost("add-driver")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(201, Type = typeof(ResDriverAddingDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -37,7 +39,6 @@ namespace FuelGo.Controllers
                 return StatusCode(422, ModelState);
             }
             var driverMap = _mapper.Map<User>(driverData);
-            driverMap.Role = "Driver";
             driverMap.Password = "123456789";
             driverMap.CreatedAt = DateTime.Now;
             var adminId = base.GetActiveUser().Id;
