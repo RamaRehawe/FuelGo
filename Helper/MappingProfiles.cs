@@ -15,6 +15,11 @@ namespace FuelGo.Helper
             CreateMap<Driver, ReqDriverAddingDto>().ReverseMap();
             CreateMap<User, ResDriverAddingDto>().ReverseMap();
             CreateMap<Driver, ResDriverAddingDto>().ReverseMap();
+            CreateMap<User, ReqAdminAddingDto>().ReverseMap();
+            CreateMap<Admin, ReqAdminAddingDto>().ReverseMap();
+            CreateMap<User, ResAdminAddingDto>().ReverseMap();
+            CreateMap<Admin, ResAdminAddingDto>().ReverseMap();
+
         }
     }
 }

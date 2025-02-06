@@ -84,6 +84,46 @@
     ]
   },
   {
+    "ContainingType": "FuelGo.Controllers.SystemAdminController",
+    "Method": "AddAdmin",
+    "RelativePath": "api/SystemAdmin/add-Admin",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "adminData",
+        "Type": "FuelGo.Dto.ReqAdminAddingDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "FuelGo.Dto.ResAdminAddingDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 201
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
     "ContainingType": "FuelGo.Controllers.UserController",
     "Method": "Login",
     "RelativePath": "api/User/login",
