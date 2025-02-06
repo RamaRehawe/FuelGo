@@ -15,17 +15,15 @@ namespace FuelGo.Controllers
     [ApiController]
     public class UserController : BaseController
     {
-        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
-        public UserController(IMapper mapper, IConfiguration configuration,
-            UserInfoService userInfoService,
-            IUserRepository userRepository) : base(userInfoService, userRepository)
+        public UserController(UserInfoService userInfoService, IUserRepository userRepository,
+            IMapper mapper, IConfiguration configuration) : 
+            base(userInfoService, userRepository)
         {
-            _configuration = configuration;
             _mapper = mapper;
-            _userRepository = userRepository;
+            _configuration = configuration;
         }
 
         [HttpPost("login")]

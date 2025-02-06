@@ -2,6 +2,7 @@
 using FuelGo.Dto;
 using FuelGo.Inerfaces;
 using FuelGo.Models;
+using FuelGo.Repository;
 using FuelGo.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,12 +15,16 @@ namespace FuelGo.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IAdminRepository _adminRepository;
-        public AdminController(UserInfoService userInfoService, IUserRepository userRepository, 
-            IMapper mapper, IAdminRepository adminRepository) : 
+        private readonly ISystemAdminRepository _systemAdminRepository;
+        private readonly ICustomerRepository _customerRepository;
+
+        public AdminController(UserInfoService userInfoService, IUserRepository userRepository, IMapper mapper,
+            IAdminRepository adminRepository, ICustomerRepository customerRepository) : 
             base(userInfoService, userRepository)
         {
             _mapper = mapper;
             _adminRepository = adminRepository;
+            _customerRepository = customerRepository;
         }
 
         [HttpPost("add-driver")]
@@ -31,7 +36,7 @@ namespace FuelGo.Controllers
         {
             if (driverData == null)
                 return BadRequest(ModelState);
-            var newDriver = _UOF._customerRepository.GetUsers().Where(d => d.Phone == driverData.Phone).FirstOrDefault();
+            var newDriver = _customerRepository.GetUsers().Where(d => d.Phone == driverData.Phone).FirstOrDefault();
             if(newDriver != null)
             {
                 ModelState.AddModelError("", "Driver allready exists");
@@ -41,34 +46,32 @@ namespace FuelGo.Controllers
             driverMap.Role = "Driver";
             driverMap.Password = "123456789";
             driverMap.CreatedAt = DateTime.Now;
+            driverMap.UpdatedAt = DateTime.Now;
             var adminId = base.GetActiveUser().Id;
             var center = _adminRepository.GetCenterByAdminId(adminId);
-            var shiftName = (_adminRepository.GetShifts().Where(s => s.Id == driverData.ShiftId).FirstOrDefault()).ShiftName;
-            var truckPlateNum = (_adminRepository.GetTrucks().Where(t => t.Id == driverData.TruckId).FirstOrDefault()).PlateNumber;
+            var shift = (_adminRepository.GetShifts().Where(s => s.Id == driverData.ShiftId).FirstOrDefault());
+            var truck = (_adminRepository.GetTrucks().Where(t => t.Id == driverData.TruckId).FirstOrDefault());
             if(!_adminRepository.AddDriver(driverMap))
             {
                 ModelState.AddModelError("", "Somthing went wrong while saving");
                 return StatusCode(500, ModelState);
             }
-            var driver = _adminRepository.GetDriverByUserId(driverMap.Id);
-            driver.CenterId = center.Id;
-            driver.ShiftId = driverData.ShiftId;
-            driver.TruckId = driverData.TruckId;
+            var status = (_adminRepository.GetStatuses().Where(s => s.Name == "مشغول").FirstOrDefault());
+            _adminRepository.AddDriver(new Driver { 
+                UserId = driverMap.Id, ShiftId = shift.Id, StatusId = status.Id, 
+                TruckId = truck.Id, CenterId = center.Id, IsDriving = false });
+            
             var resdriver = new ResDriverAddingDto
             {
                 Name = driverData.Name,
                 Phone = driverData.Phone,
                 Email = driverData.Email,
                 Password = driverMap.Password,
-                ShiftName = shiftName,
-                TruckPlateNumber = truckPlateNum,
+                ShiftName = shift.ShiftName,
+                TruckPlateNumber = truck.PlateNumber,
                 CenterName = center.Name
             };
-            if(!_UOF.Save())
-            {
-                ModelState.AddModelError("", "Somthing went wrong while saving");
-                return StatusCode(500, ModelState);
-            }
+            
             return Ok("Successfully added");
 
         }

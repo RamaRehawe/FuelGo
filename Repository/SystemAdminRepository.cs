@@ -13,10 +13,13 @@ namespace FuelGo.Repository
         public bool AddAdmin(User user)
         {
             _context.Add(user);
-            _context.SaveChanges();
-            var admin = new Admin { UserId = user.Id };
-            _context.Add(admin);
             return Save();
+        }
+
+        public void AddAdmin(Admin admin)
+        {
+            _context.Add(admin);
+            _context.SaveChanges();
         }
 
         public bool AddCenter(Center center)
@@ -33,6 +36,11 @@ namespace FuelGo.Repository
         public ICollection<Center> GetCenters()
         {
             return _context.Centers.OrderBy(c => c.Id).ToList();
+        }
+
+        public ICollection<Status> GetStatuses()
+        {
+            return _context.Statuses.OrderBy(s => s.Id).ToList();
         }
     }
 }

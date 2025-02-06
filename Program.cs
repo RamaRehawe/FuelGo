@@ -1,3 +1,4 @@
+using FuelGo;
 using FuelGo.Data;
 using FuelGo.Inerfaces;
 using FuelGo.Repository;
@@ -35,8 +36,8 @@ builder.Services.AddAuthentication(x =>
 });
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
+builder.Services.AddTransient<Seed>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IBaseRepository, BaseRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -53,6 +54,29 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<UserInfoService>();
 var app = builder.Build();
+
+if (args.Length == 1 && args[0].ToLower() == "seeddata")
+    SeedData(app);
+
+void SeedData(IHost app)
+{
+    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+
+    using (var scope = scopedFactory.CreateScope())
+    {
+        var service = scope.ServiceProvider.GetService<Seed>();
+        service.SeedDataContext();
+    }
+}
+
+// Call the SeedDataContext method directly
+using (var scope = app.Services.CreateScope())
+{
+    var scopedServices = scope.ServiceProvider;
+    var seedService = scopedServices.GetRequiredService<Seed>();
+    seedService.SeedDataContext();
+}
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
