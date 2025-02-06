@@ -31,7 +31,6 @@ namespace FuelGo.Controllers
         {
             if (driverData == null)
                 return BadRequest(ModelState);
-            driverData.Role = "Driver";
             var newDriver = _UOF._customerRepository.GetUsers().Where(d => d.Phone == driverData.Phone).FirstOrDefault();
             if(newDriver != null)
             {
@@ -39,6 +38,7 @@ namespace FuelGo.Controllers
                 return StatusCode(422, ModelState);
             }
             var driverMap = _mapper.Map<User>(driverData);
+            driverMap.Role = "Driver";
             driverMap.Password = "123456789";
             driverMap.CreatedAt = DateTime.Now;
             var adminId = base.GetActiveUser().Id;

@@ -6,5 +6,7 @@ namespace FuelGo.Inerfaces
     {
         bool AddAdmin(User user);
         Admin GetAdminById(int id);
+        ICollection<Center> GetCenters();
+        bool AddCenter(Center center);
     }
 }
