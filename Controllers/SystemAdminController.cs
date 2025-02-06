@@ -13,10 +13,18 @@ namespace FuelGo.Controllers
     public class SystemAdminController : BaseController
     {
         private readonly IMapper _mapper;
-        public SystemAdminController(UserInfoService userInfoService, IUserRepository userRepository, IMapper mapper) : 
+        private readonly ICustomerRepository _customerRepository;
+        private readonly ISystemAdminRepository _systemAdminRepository;
+        private readonly IAdminRepository _adminRepository;
+
+        public SystemAdminController(UserInfoService userInfoService, IUserRepository userRepository, IMapper mapper,
+            ICustomerRepository customerRepository, ISystemAdminRepository systemAdminRepository, IAdminRepository adminRepository) : 
             base(userInfoService, userRepository)
         {
             _mapper = mapper;
+            _customerRepository = customerRepository;
+            _systemAdminRepository = systemAdminRepository;
+            _adminRepository = adminRepository;
         }
 
         [HttpPost("add-Admin")]
@@ -28,7 +36,7 @@ namespace FuelGo.Controllers
         {
             if (adminData == null)
                 return BadRequest(ModelState);
-            var newAdmin = _UOF._customerRepository.GetUsers().Where(d => d.Phone == adminData.Phone).FirstOrDefault();
+            var newAdmin = _customerRepository.GetUsers().Where(d => d.Phone == adminData.Phone).FirstOrDefault();
             if(newAdmin != null)
             {
                 ModelState.AddModelError("", "Admin allready exists");
@@ -38,14 +46,15 @@ namespace FuelGo.Controllers
             adminMap.Role = "Admin";
             adminMap.Password = "123456789";
             adminMap.CreatedAt = DateTime.Now;
-            if(!_UOF._systemAdminRepository.AddAdmin(adminMap))
+            adminMap.UpdatedAt = DateTime.Now;
+            if(!_systemAdminRepository.AddAdmin(adminMap))
             {
                 ModelState.AddModelError("", "Somthing went wrong while saving");
                 return StatusCode(500, ModelState);
             }
-            var admin = _UOF._systemAdminRepository.GetAdminById(adminMap.Id);
-            admin.CenterId = adminData.CenterId;
-            var center = _UOF._adminRepository.GetCenterByAdminId(adminMap.Id);
+            var center = (_systemAdminRepository.GetCenters().Where(c => c.Id == adminData.CenterId).FirstOrDefault());
+            var statusId = (_systemAdminRepository.GetStatuses().Where(s => s.Name == "نشط").FirstOrDefault()).Id;
+            _systemAdminRepository.AddAdmin(new Admin { CenterId = center.Id, UserId = adminMap.Id, StatusId =  statusId });
             var resAdmin = new ResAdminAddingDto
             {
                 Name = adminMap.Name,
@@ -54,11 +63,7 @@ namespace FuelGo.Controllers
                 Password = adminMap.Password,
                 CenterName = center.Name
             };
-            if (!_UOF.Save())
-            {
-                ModelState.AddModelError("", "Somthing went wrong while saving");
-                return StatusCode(500, ModelState);
-            }
+            
             return Ok("Successfully added");
 
         }
@@ -70,7 +75,7 @@ namespace FuelGo.Controllers
         {
             if (centerData == null)
                 return BadRequest(ModelState);
-            var newCenter = _UOF._systemAdminRepository.GetCenters().
+            var newCenter = _systemAdminRepository.GetCenters().
                 Where(c => c.Name == centerData.Name && c.NeighborhoodId == centerData.NeighborhoodId).FirstOrDefault();
             if(newCenter != null)
             {
@@ -78,13 +83,12 @@ namespace FuelGo.Controllers
                 return StatusCode(422, ModelState);
             }
             var centerMap = _mapper.Map<Center>(centerData);
-            if(!_UOF._systemAdminRepository.AddCenter(centerMap))
+            if(!_systemAdminRepository.AddCenter(centerMap))
             {
                 ModelState.AddModelError("", "Somthing went wrong while saving");
                 return StatusCode(500, ModelState);
             }
             return Ok("Successfully added");
         }
-
     }
 }

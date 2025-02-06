@@ -10,6 +10,7 @@ namespace FuelGo.Repository
         {
             _context = context;
         }
+
         public bool Save()
         {
             var saved = _context.SaveChanges();

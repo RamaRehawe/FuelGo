@@ -13,9 +13,18 @@ namespace FuelGo.Repository
         public bool AddDriver(User user)
         {
             _context.Add(user);
-            _context.SaveChanges();
-            var driver = new Driver { UserId = user.Id };
+            return Save();
+        }
+
+        public void AddDriver(Driver driver)
+        {
             _context.Add(driver);
+            _context.SaveChanges();
+        }
+
+        public bool AddTruck(Truck truck)
+        {
+            _context.Add(truck);
             return Save();
         }
 
@@ -33,6 +42,11 @@ namespace FuelGo.Repository
         public ICollection<Shift> GetShifts()
         {
             return _context.Shifts.OrderBy(s => s.Id).ToList();
+        }
+
+        public ICollection<Status> GetStatuses()
+        {
+            return _context.Statuses.OrderBy(s => s.Id).ToList();
         }
 
         public ICollection<Truck> GetTrucks()
