@@ -1,5 +1,45 @@
 [
   {
+    "ContainingType": "FuelGo.Controllers.AdminController",
+    "Method": "AddDriver",
+    "RelativePath": "api/Admin/add-driver",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "driverData",
+        "Type": "FuelGo.Dto.ReqDriverAddingDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "FuelGo.Dto.ResDriverAddingDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 201
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
     "ContainingType": "FuelGo.Controllers.CustomerController",
     "Method": "RegisterCustomer",
     "RelativePath": "api/Customer/Register",
@@ -45,8 +85,8 @@
   },
   {
     "ContainingType": "FuelGo.Controllers.UserController",
-    "Method": "LoginAsync",
-    "RelativePath": "api/User/customer_login",
+    "Method": "Login",
+    "RelativePath": "api/User/login",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
