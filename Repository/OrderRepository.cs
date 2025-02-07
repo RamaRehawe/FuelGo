@@ -27,6 +27,11 @@ namespace FuelGo.Repository
             return _context.Cities.Where(c => c.Id == neighborhood.CityId).FirstOrDefault().Name;
         }
 
+        public double GetConstant(string key)
+        {
+            return _context.ConstantDictionaries.Where(cd => cd.Key == key).FirstOrDefault().Value;
+        }
+
         public int GetCustomerId(int userId)
         {
             return _context.Customers.Where(c => c.UserId == userId).FirstOrDefault().Id;
@@ -37,9 +42,19 @@ namespace FuelGo.Repository
             return _context.FuelTypes.Where(f => f.Id == fuelTypeId).FirstOrDefault().Name;
         }
 
+        public double GetFuelPrice(int fuelTypeId)
+        {
+            return _context.FuelDetails.Where(fd => fd.FuelTypeId == fuelTypeId).FirstOrDefault().Price;
+        }
+
         public string GetNeighborhoodName(int neighborhoodId)
         {
             return _context.Neighborhoods.Where(n => n.Id == neighborhoodId).FirstOrDefault().Name;
+        }
+
+        public Order GetOrder(string orderNumber)
+        {
+            return _context.Orders.Where(o => o.OrderNumber == orderNumber).FirstOrDefault();
         }
 
         public ICollection<Status> GetStatuses()

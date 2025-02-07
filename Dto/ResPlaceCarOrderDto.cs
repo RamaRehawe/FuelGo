@@ -9,6 +9,7 @@
         public string CityName { get; set; }
         public string FuelTypeName { get; set; }
         public double OrderedQuantity { get; set; }
+        public double FuelPrice { get; set; }
         public string CustomerCarBrand { get; set; } // Nullable
         public string StatusName { get; set; }
     }

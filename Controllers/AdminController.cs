@@ -47,7 +47,7 @@ namespace FuelGo.Controllers
             driverMap.Password = "123456789";
             driverMap.CreatedAt = DateTime.Now;
             driverMap.UpdatedAt = DateTime.Now;
-            var adminId = base.GetActiveUser().Id;
+            var adminId = base.GetActiveUser()!.Id;
             var center = _adminRepository.GetCenterByAdminId(adminId);
             var shift = (_adminRepository.GetShifts().Where(s => s.Id == driverData.ShiftId).FirstOrDefault());
             var truck = (_adminRepository.GetTrucks().Where(t => t.Id == driverData.TruckId).FirstOrDefault());
@@ -91,7 +91,7 @@ namespace FuelGo.Controllers
                 return StatusCode(422, ModelState);
             }
             var truckMap = _mapper.Map<Truck>(truckData);
-            var adminId = base.GetActiveUser().Id;
+            var adminId = base.GetActiveUser()!.Id;
             var center = _adminRepository.GetCenterByAdminId(adminId);
             truckMap.CenterId = center.Id;
             if(!_adminRepository.AddTruck(truckMap))
