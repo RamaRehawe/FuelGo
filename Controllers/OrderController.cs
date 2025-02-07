@@ -44,7 +44,11 @@ namespace FuelGo.Controllers
             orderMap.StatusId = statusId;
             orderMap.IsActive = true;
             orderMap.AuthCode = GenerateRandomCode(10);
-            _orderRepository.AddOrder(orderMap);
+            if(!_orderRepository.AddOrder(orderMap))
+            {
+                ModelState.AddModelError("", "Somthing went wrong while saving");
+                return StatusCode(500, ModelState);
+            }
             
             var neighborhoodName = _orderRepository.GetNeighborhoodName(orderMap.NeighborhoodId);
             var cityName = _orderRepository.GetCityName(orderMap.NeighborhoodId);
