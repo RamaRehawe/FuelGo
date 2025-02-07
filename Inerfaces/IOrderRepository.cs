@@ -8,6 +8,7 @@ namespace FuelGo.Inerfaces
         ICollection<Status> GetStatuses();
         bool AddOrder(Order order);
         int GetCustomerId(int userId);
+        int GetDriverId(int userId);
         string GetNeighborhoodName(int neighborhoodId);
         string GetCityName(int neighborhoodId);
         string GetFuelName(int fuelTypeId);
@@ -15,5 +16,8 @@ namespace FuelGo.Inerfaces
         double GetConstant(string key);
         double GetFuelPrice(int fuelTypeId);
         Order GetOrder(string orderNumber);
+        Truck GetTruck(int? truckId);
+        Driver GetDriver(int userId);
+        bool UpdateOrder(Order order);
     }
 }

@@ -71,7 +71,30 @@ namespace FuelGo.Controllers
             return Ok(resOrder);
         }
 
-        
+        [HttpPost("accept-order")]
+        [Authorize(Roles = "Driver")]
+        [ProducesResponseType(200)]
+        public IActionResult AcceptOrder(ReqAcceptOrderDto orderData)
+        {
+            if (orderData == null)
+                return BadRequest(ModelState);
+            var order = _orderRepository.GetOrder(orderData.OrderNumber);
+            var statusId = _orderRepository.GetStatuses().Where(s => s.Name == "في الطريق").FirstOrDefault().Id;
+            var fuelPrice = _orderRepository.GetFuelPrice(order.FuelTypeId);
+            var driverId = _orderRepository.GetDriverId(base.GetActiveUser()!.Id);
+            var driver = _orderRepository.GetDriver(base.GetActiveUser()!.Id);
+            var truck = _orderRepository.GetTruck(driver.TruckId);
+            order.StatusId = statusId;
+            order.DriverId = driverId;
+            order.FinalPrice = (fuelPrice * order.OrderedQuantity) + 
+                CalculateDeliveryPrice(order.Lat, order.Long, truck.Lat, truck.Long, order.OrderedQuantity);
+            if(!_orderRepository.UpdateOrder(order))
+            {
+                ModelState.AddModelError("", "Somthing went wrong while saving");
+                return StatusCode(500, ModelState);
+            }
+            return Ok(order);
+        }
         private string GenerateRandomCode(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

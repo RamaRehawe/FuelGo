@@ -37,6 +37,16 @@ namespace FuelGo.Repository
             return _context.Customers.Where(c => c.UserId == userId).FirstOrDefault().Id;
         }
 
+        public Driver GetDriver(int userId)
+        {
+            return _context.Drivers.Where(d => d.UserId == userId).FirstOrDefault();
+        }
+
+        public int GetDriverId(int userId)
+        {
+            return _context.Drivers.Where(d => d.UserId == userId).FirstOrDefault().Id;
+        }
+
         public string GetFuelName(int fuelTypeId)
         {
             return _context.FuelTypes.Where(f => f.Id == fuelTypeId).FirstOrDefault().Name;
@@ -60,6 +70,17 @@ namespace FuelGo.Repository
         public ICollection<Status> GetStatuses()
         {
             return _context.Statuses.OrderBy(s => s.Id).ToList();
+        }
+
+        public Truck GetTruck(int? truckId)
+        {
+            return _context.Trucks.Where(t => t.Id == truckId).FirstOrDefault();
+        }
+
+        public bool UpdateOrder(Order order)
+        {
+            _context.Update(order);
+            return Save();
         }
     }
 }
