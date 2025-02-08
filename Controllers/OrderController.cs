@@ -54,7 +54,6 @@ namespace FuelGo.Controllers
             var cityName = _orderRepository.GetCityName(orderMap.NeighborhoodId);
             var fuelName = _orderRepository.GetFuelName(orderMap.FuelTypeId);
             var carBrand = _orderRepository.GetCarBrand(orderMap.CustomerCarId);
-            var fuelPrice = _orderRepository.GetFuelPrice(orderMap.FuelTypeId);
             var resOrder = new ResPlaceCarOrderDto
             {
                 Date = orderMap.Date,
@@ -65,8 +64,7 @@ namespace FuelGo.Controllers
                 FuelTypeName = fuelName,
                 OrderedQuantity = orderMap.OrderedQuantity,
                 CustomerCarBrand = carBrand,
-                StatusName = "قيد الانتظار",
-                FuelPrice = fuelPrice * orderMap.OrderedQuantity
+                StatusName = "قيد الانتظار"
             };
             return Ok(resOrder);
         }
@@ -79,6 +77,8 @@ namespace FuelGo.Controllers
             if (orderData == null)
                 return BadRequest(ModelState);
             var order = _orderRepository.GetOrder(orderData.OrderNumber);
+            if (order == null)
+                return NotFound("Order not found.");
             var statusId = _orderRepository.GetStatuses().Where(s => s.Name == "في الطريق").FirstOrDefault().Id;
             var fuelPrice = _orderRepository.GetFuelPrice(order.FuelTypeId);
             var driverId = _orderRepository.GetDriverId(base.GetActiveUser()!.Id);
@@ -111,23 +111,8 @@ namespace FuelGo.Controllers
             return orderNum;
         }
 
-        // calculate the total price.
-        public double CalculateTotalPrice(double customerLat, double customerLong,
-                                  double driverLat, double driverLong,
-                                  double orderedLiters, double literPrice)
-        {
-            // Calculate the cost of the fuel order.
-            double fuelCost = orderedLiters * literPrice;
-
-            // Calculate the delivery fee based on the ordered liters and distance.
-            double deliveryFee = CalculateDeliveryPrice(customerLat, customerLong, driverLat, driverLong, orderedLiters);
-
-            // The total price is the sum of the fuel cost and the delivery fee.
-            return fuelCost + deliveryFee;
-        }
-
         // calculate the delivery price.
-        public double CalculateDeliveryPrice(double customerLat, double customerLong, double driverLat, double driverLong,
+        private double CalculateDeliveryPrice(double customerLat, double customerLong, double driverLat, double driverLong,
             double orderedLiters)
         {
             // Retrieve the free delivery threshold (in liters)
@@ -163,7 +148,7 @@ namespace FuelGo.Controllers
             return finalPrice;
         }
 
-        public double GetConstantValue(string key)
+        private double GetConstantValue(string key)
         {
             return _orderRepository.GetConstant(key);
         }
