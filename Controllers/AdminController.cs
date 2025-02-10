@@ -14,17 +14,11 @@ namespace FuelGo.Controllers
     public class AdminController : BaseController
     {
         private readonly IMapper _mapper;
-        private readonly IAdminRepository _adminRepository;
-        private readonly ISystemAdminRepository _systemAdminRepository;
-        private readonly ICustomerRepository _customerRepository;
 
-        public AdminController(UserInfoService userInfoService, IUserRepository userRepository, IMapper mapper,
-            IAdminRepository adminRepository, ICustomerRepository customerRepository) : 
-            base(userInfoService, userRepository)
+        public AdminController(UserInfoService userInfoService, IUnitOfWork unitOfWork, IMapper mapper) : 
+            base(userInfoService, unitOfWork)
         {
             _mapper = mapper;
-            _adminRepository = adminRepository;
-            _customerRepository = customerRepository;
         }
 
         [HttpPost("add-driver")]
@@ -36,7 +30,7 @@ namespace FuelGo.Controllers
         {
             if (driverData == null)
                 return BadRequest(ModelState);
-            var newDriver = _customerRepository.GetUsers().Where(d => d.Phone == driverData.Phone).FirstOrDefault();
+            var newDriver = _unitOfWork._customerRepository.GetUsers().Where(d => d.Phone == driverData.Phone).FirstOrDefault();
             if(newDriver != null)
             {
                 ModelState.AddModelError("", "Driver allready exists");
@@ -48,16 +42,16 @@ namespace FuelGo.Controllers
             driverMap.CreatedAt = DateTime.Now;
             driverMap.UpdatedAt = DateTime.Now;
             var adminId = base.GetActiveUser()!.Id;
-            var center = _adminRepository.GetCenterByAdminId(adminId);
-            var shift = (_adminRepository.GetShifts().Where(s => s.Id == driverData.ShiftId).FirstOrDefault());
-            var truck = (_adminRepository.GetTrucks().Where(t => t.Id == driverData.TruckId).FirstOrDefault());
-            if(!_adminRepository.AddDriver(driverMap))
+            var center = _unitOfWork._adminRepository.GetCenterByAdminId(adminId);
+            var shift = (_unitOfWork._adminRepository.GetShifts().Where(s => s.Id == driverData.ShiftId).FirstOrDefault());
+            var truck = (_unitOfWork._adminRepository.GetTrucks().Where(t => t.Id == driverData.TruckId).FirstOrDefault());
+            if(!_unitOfWork._adminRepository.AddDriver(driverMap))
             {
                 ModelState.AddModelError("", "Somthing went wrong while saving");
                 return StatusCode(500, ModelState);
             }
-            var status = (_adminRepository.GetStatuses().Where(s => s.Name == "مشغول").FirstOrDefault());
-            _adminRepository.AddDriver(new Driver { 
+            var status = (_unitOfWork._adminRepository.GetStatuses().Where(s => s.Name == "مشغول").FirstOrDefault());
+            _unitOfWork._adminRepository.AddDriver(new Driver { 
                 UserId = driverMap.Id, ShiftId = shift.Id, StatusId = status.Id, 
                 TruckId = truck.Id, CenterId = center.Id, IsDriving = false });
             
@@ -83,7 +77,7 @@ namespace FuelGo.Controllers
         {
             if (truckData == null)
                 return BadRequest(ModelState);
-            var newTruck = _adminRepository.GetTrucks().
+            var newTruck = _unitOfWork._adminRepository.GetTrucks().
                 Where(t => t.PlateNumber == truckData.PlateNumber).FirstOrDefault();
             if(newTruck != null)
             {
@@ -92,9 +86,9 @@ namespace FuelGo.Controllers
             }
             var truckMap = _mapper.Map<Truck>(truckData);
             var adminId = base.GetActiveUser()!.Id;
-            var center = _adminRepository.GetCenterByAdminId(adminId);
+            var center = _unitOfWork._adminRepository.GetCenterByAdminId(adminId);
             truckMap.CenterId = center.Id;
-            if(!_adminRepository.AddTruck(truckMap))
+            if(!_unitOfWork._adminRepository.AddTruck(truckMap))
             {
                 ModelState.AddModelError("", "Somthing went wrong while saving");
                 return StatusCode(500, ModelState);

@@ -15,15 +15,12 @@ namespace FuelGo.Controllers
     public class OrderController : BaseController
     {
         private readonly IMapper _mapper;
-        private readonly IOrderRepository _orderRepository;
         private static Random random = new Random();
         private static HashSet<string> orderNumbers = new HashSet<string>();
 
-        public OrderController(UserInfoService userInfoService, IUserRepository userRepository, IOrderRepository orderRepository,
-            IMapper mapper) : 
-            base(userInfoService, userRepository)
+        public OrderController(UserInfoService userInfoService, IUnitOfWork unitOfWork, IMapper mapper) : 
+            base(userInfoService, unitOfWork)
         {
-            _orderRepository = orderRepository;
             _mapper = mapper;
         }
 
@@ -39,21 +36,21 @@ namespace FuelGo.Controllers
             orderMap.Date = DateTime.Now;
             orderMap.OrderNumber = GenerateRandomCode(6);
             orderMap.IsItUrgent = false;
-            orderMap.CustomerId = _orderRepository.GetCustomerId( base.GetActiveUser()!.Id);
-            var statusId = _orderRepository.GetStatuses().Where(s => s.Name == "قيد الانتظار").FirstOrDefault().Id;
+            orderMap.CustomerId = _unitOfWork._orderRepository.GetCustomerId( base.GetActiveUser()!.Id);
+            var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "قيد الانتظار").FirstOrDefault().Id;
             orderMap.StatusId = statusId;
             orderMap.IsActive = true;
             orderMap.AuthCode = GenerateRandomCode(10);
-            if(!_orderRepository.AddOrder(orderMap))
+            if(!_unitOfWork._orderRepository.AddOrder(orderMap))
             {
                 ModelState.AddModelError("", "Somthing went wrong while saving");
                 return StatusCode(500, ModelState);
             }
             
-            var neighborhoodName = _orderRepository.GetNeighborhoodName(orderMap.NeighborhoodId);
-            var cityName = _orderRepository.GetCityName(orderMap.NeighborhoodId);
-            var fuelName = _orderRepository.GetFuelName(orderMap.FuelTypeId);
-            var carBrand = _orderRepository.GetCarBrand(orderMap.CustomerCarId);
+            var neighborhoodName = _unitOfWork._orderRepository.GetNeighborhoodName(orderMap.NeighborhoodId);
+            var cityName = _unitOfWork._orderRepository.GetCityName(orderMap.NeighborhoodId);
+            var fuelName = _unitOfWork._orderRepository.GetFuelName(orderMap.FuelTypeId);
+            var carBrand = _unitOfWork._orderRepository.GetCarBrand(orderMap.CustomerCarId);
             var resOrder = new ResPlaceCarOrderDto
             {
                 Date = orderMap.Date,
@@ -69,6 +66,17 @@ namespace FuelGo.Controllers
             return Ok(resOrder);
         }
 
+        [HttpGet("get-pending-orders")]
+        [Authorize(Roles = "Driver")]
+        [ProducesResponseType(200)]
+        public IActionResult GetPendingOrders()
+        {
+            var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "قيد الانتظار").FirstOrDefault().Id;
+            var orders = _unitOfWork._orderRepository.GetPendingOrders(statusId);
+            return Ok(orders);
+
+        }
+
         [HttpPost("accept-order")]
         [Authorize(Roles = "Driver")]
         [ProducesResponseType(200)]
@@ -76,19 +84,20 @@ namespace FuelGo.Controllers
         {
             if (orderData == null)
                 return BadRequest(ModelState);
-            var order = _orderRepository.GetOrder(orderData.OrderNumber);
+            var order = _unitOfWork._orderRepository.GetOrder(orderData.OrderNumber);
             if (order == null)
                 return NotFound("Order not found.");
-            var statusId = _orderRepository.GetStatuses().Where(s => s.Name == "في الطريق").FirstOrDefault().Id;
-            var fuelPrice = _orderRepository.GetFuelPrice(order.FuelTypeId);
-            var driverId = _orderRepository.GetDriverId(base.GetActiveUser()!.Id);
-            var driver = _orderRepository.GetDriver(base.GetActiveUser()!.Id);
-            var truck = _orderRepository.GetTruck(driver.TruckId);
+            var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "في الطريق").FirstOrDefault().Id;
+            var fuelPrice = _unitOfWork._orderRepository.GetFuelPrice(order.FuelTypeId);
+            var driverId = _unitOfWork._orderRepository.GetDriverId(base.GetActiveUser()!.Id);
+            var driver = _unitOfWork._orderRepository.GetDriver(base.GetActiveUser()!.Id);
+            var truck = _unitOfWork._orderRepository.GetTruck(driver.TruckId);
             order.StatusId = statusId;
             order.DriverId = driverId;
             order.FinalPrice = (fuelPrice * order.OrderedQuantity) + 
                 CalculateDeliveryPrice(order.Lat, order.Long, truck.Lat, truck.Long, order.OrderedQuantity);
-            if(!_orderRepository.UpdateOrder(order))
+            order.IsActive = true;
+            if(!_unitOfWork._orderRepository.UpdateOrder(order))
             {
                 ModelState.AddModelError("", "Somthing went wrong while saving");
                 return StatusCode(500, ModelState);
@@ -150,7 +159,7 @@ namespace FuelGo.Controllers
 
         private double GetConstantValue(string key)
         {
-            return _orderRepository.GetConstant(key);
+            return _unitOfWork._orderRepository.GetConstant(key);
         }
         // Haversine formula to calculate distance between two points specified by latitude and longitude.
         private double HaversineDistance(double lat1, double lon1, double lat2, double lon2)
