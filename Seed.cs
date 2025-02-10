@@ -22,11 +22,46 @@ namespace FuelGo
             {
                 var shifts = new List<Shift>
                 {
-                    new Shift { ShiftName = "Morning Shift", StartTime = 6.00, EndTime = 14.00, WorkingDays = "All-Week", HolidayDays = null },
-                    new Shift { ShiftName = "Midday Shift", StartTime = 12.00, EndTime = 20.00, WorkingDays = "All-Week", HolidayDays = null },
-                    new Shift { ShiftName = "Evening Shift", StartTime = 14.00, EndTime = 22.00, WorkingDays = "All-Week", HolidayDays = null },
-                    new Shift { ShiftName = "Night Shift", StartTime = 20.00, EndTime = 4.00, WorkingDays = "All-Week", HolidayDays = null },
-                    new Shift { ShiftName = "Graveyard Shift", StartTime = 22.00, EndTime = 6.00, WorkingDays = "All-Week", HolidayDays = null },
+                    new Shift
+                    {
+                        ShiftName = "الوردية الصباحية",
+                        StartTime = 6.00,
+                        EndTime = 14.00,
+                        WorkingDays = "طوال الأسبوع",
+                        HolidayDays = null
+                    },
+                    new Shift
+                    {
+                        ShiftName = "الوردية الظهرية",
+                        StartTime = 12.00,
+                        EndTime = 20.00,
+                        WorkingDays = "طوال الأسبوع",
+                        HolidayDays = null
+                    },
+                    new Shift
+                    {
+                        ShiftName = "الوردية المسائية",
+                        StartTime = 14.00,
+                        EndTime = 22.00,
+                        WorkingDays = "طوال الأسبوع",
+                        HolidayDays = null
+                    },
+                    new Shift
+                    {
+                        ShiftName = "الوردية الليلية",
+                        StartTime = 20.00,
+                        EndTime = 4.00,
+                        WorkingDays = "طوال الأسبوع",
+                        HolidayDays = null
+                    },
+                    new Shift
+                    {
+                        ShiftName = "الوردية الليلية المتأخرة",
+                        StartTime = 22.00,
+                        EndTime = 6.00,
+                        WorkingDays = "طوال الأسبوع",
+                        HolidayDays = null
+                    },
                 };
 
                 dataContext.Shifts.AddRange(shifts);

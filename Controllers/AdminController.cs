@@ -50,7 +50,7 @@ namespace FuelGo.Controllers
                 ModelState.AddModelError("", "Somthing went wrong while saving");
                 return StatusCode(500, ModelState);
             }
-            var status = (_unitOfWork._adminRepository.GetStatuses().Where(s => s.Name == "مشغول").FirstOrDefault());
+            var status = _unitOfWork._adminRepository.GetStatuses().Where(s => s.Name == "غير متصل").FirstOrDefault();
             _unitOfWork._adminRepository.AddDriver(new Driver { 
                 UserId = driverMap.Id, ShiftId = shift.Id, StatusId = status.Id, 
                 TruckId = truck.Id, CenterId = center.Id, IsDriving = false });

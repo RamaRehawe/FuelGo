@@ -27,7 +27,19 @@ namespace FuelGo.Controllers
             var orders = _unitOfWork._driverRepository.GetPendingOrders(statusId);
             var resOrders = _mapper.Map<List<ResPendingOrdersDto>>(orders);
             return Ok(resOrders);
+        }
 
+        [HttpPost("start-job")]
+        [Authorize(Roles = "Driver")]
+        [ProducesResponseType(200)]
+        public IActionResult StartJob()
+        {
+            var userId = base.GetActiveUser()!.Id;
+            var driver = _unitOfWork._orderRepository.GetDriver(userId);
+            var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "متاح").FirstOrDefault();
+            driver.Status = statusId;
+            _unitOfWork.Commit();
+            return Ok("Started");
         }
     }
 }
