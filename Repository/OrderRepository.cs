@@ -67,10 +67,7 @@ namespace FuelGo.Repository
             return _context.Orders.Where(o => o.OrderNumber == orderNumber).FirstOrDefault();
         }
 
-        public ICollection<Order> GetPendingOrders(int statusId)
-        {
-            return _context.Orders.Where(o => o.StatusId == statusId).ToList();
-        }
+        
 
         public ICollection<Status> GetStatuses()
         {

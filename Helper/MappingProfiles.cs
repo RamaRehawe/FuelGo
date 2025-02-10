@@ -23,6 +23,7 @@ namespace FuelGo.Helper
             CreateMap<Truck, ReqTruckAddingDto>().ReverseMap();
             CreateMap<Order, ReqPlaceCarOrderDto>().ReverseMap();
             CreateMap<Order, ReqAcceptOrderDto>().ReverseMap();
+            CreateMap<Order, ResPendingOrdersDto>().ReverseMap();
         }
     }
 }

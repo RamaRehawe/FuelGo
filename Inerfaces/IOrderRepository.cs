@@ -19,6 +19,6 @@ namespace FuelGo.Inerfaces
         Truck GetTruck(int? truckId);
         Driver GetDriver(int userId);
         bool UpdateOrder(Order order);
-        ICollection<Order> GetPendingOrders(int statusId);
+        
     }
 }

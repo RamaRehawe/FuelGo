@@ -66,17 +66,6 @@ namespace FuelGo.Controllers
             return Ok(resOrder);
         }
 
-        [HttpGet("get-pending-orders")]
-        [Authorize(Roles = "Driver")]
-        [ProducesResponseType(200)]
-        public IActionResult GetPendingOrders()
-        {
-            var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "قيد الانتظار").FirstOrDefault().Id;
-            var orders = _unitOfWork._orderRepository.GetPendingOrders(statusId);
-            return Ok(orders);
-
-        }
-
         [HttpPost("accept-order")]
         [Authorize(Roles = "Driver")]
         [ProducesResponseType(200)]
@@ -102,7 +91,8 @@ namespace FuelGo.Controllers
                 ModelState.AddModelError("", "Somthing went wrong while saving");
                 return StatusCode(500, ModelState);
             }
-            return Ok(order);
+            var resOrder = _mapper.Map<ResPendingOrdersDto>(order);
+            return Ok(resOrder);
         }
         private string GenerateRandomCode(int length)
         {

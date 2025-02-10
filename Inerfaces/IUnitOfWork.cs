@@ -7,6 +7,7 @@
         IOrderRepository _orderRepository { get; }
         ISystemAdminRepository _systemAdminRepository { get; }
         IUserRepository _userRepository { get; }
+        IDriverRepository _driverRepository { get; }
 
         void Commit();
     }
