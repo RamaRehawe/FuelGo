@@ -74,6 +74,51 @@ namespace FuelGo.Controllers
             return Ok(resOrder);
         }
 
+        [HttpGet("get-active-order")]
+        [Authorize(Roles = "Driver")]
+        [ProducesResponseType(200)]
+        public IActionResult GetActiveOrder()
+        {
+            var userId = base.GetActiveUser()!.Id;
+            var driver = _unitOfWork._orderRepository.GetDriver(userId);
+            var order = _unitOfWork._driverRepository.GetActiveOrderByDriverId(driver.Id);
+            var resOrder = _mapper.Map<ResPendingOrdersDto>(order);
+            return Ok(resOrder);
+        }
+
+        [HttpPost("arrived-location")]
+        [Authorize(Roles = "Driver")]
+        [ProducesResponseType(200)]
+        public IActionResult ArrivedLocation()
+        {
+            var userId = base.GetActiveUser()!.Id;
+            var driver = _unitOfWork._orderRepository.GetDriver(userId);
+            var order = _unitOfWork._driverRepository.GetActiveOrderByDriverId(driver.Id);
+            var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "وصل للموقع").FirstOrDefault().Id;
+            order.StatusId = statusId;
+            _unitOfWork.Commit();
+            return Ok("driver arrived location");
+        }
+
+        [HttpPost("start-servicing-order")]
+        [Authorize(Roles = "Driver")]
+        [ProducesResponseType(200)]
+        public IActionResult StartServiceing(string authCode)
+        {
+            var userId = base.GetActiveUser()!.Id;
+            var driver = _unitOfWork._orderRepository.GetDriver(userId);
+            var order = _unitOfWork._driverRepository.GetActiveOrderByDriverId(driver.Id);
+            var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "بدء تعبئة الطلب").FirstOrDefault().Id;
+            if(order.AuthCode != authCode)
+            {
+                ModelState.AddModelError("", "the code is wrong");
+                return StatusCode(400, ModelState);
+            }
+            order.StatusId = statusId;
+            _unitOfWork.Commit();
+            return Ok("driver is servicing the order");
+        }
+
         [HttpPost("complete-order")]
         [Authorize(Roles = "Driver")]
         [ProducesResponseType(200)]
@@ -96,7 +141,7 @@ namespace FuelGo.Controllers
                 order.FinalPrice += 10000;
             }
             _unitOfWork.Commit();
-            return Ok();
+            return Ok("Order Completeed");
         }
 
         
