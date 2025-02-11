@@ -2,8 +2,8 @@
 {
     public class ReqPlaceCarOrderDto
     {
-        public double Lat { get; set; }
-        public double Long { get; set; }
+        public double CustomerLat { get; set; }
+        public double CustomerLong { get; set; }
         public string LocationDescription { get; set; }
         public int NeighborhoodId { get; set; }
         public int CityId { get; set; }
