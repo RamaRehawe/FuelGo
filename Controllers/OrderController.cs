@@ -68,7 +68,16 @@ namespace FuelGo.Controllers
             return Ok(resOrder);
         }
 
-        
+        [HttpGet("track-order")]
+        [ProducesResponseType(200)]
+        public IActionResult TrackOrder()
+        {
+            var userId = base.GetActiveUser()!.Id;
+            var customerId = _unitOfWork._orderRepository.GetCustomerId(userId);
+            var order = _unitOfWork._orderRepository.GetActiveOrderByCustomerId(customerId);
+
+            return Ok(_unitOfWork._orderRepository.GetStatuses().Where(o => o.Id == order.StatusId).FirstOrDefault().Name);
+        }
         protected string GenerateRandomCode(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
