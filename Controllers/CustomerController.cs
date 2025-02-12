@@ -44,7 +44,6 @@ namespace FuelGo.Controllers
             }
             var resCustomer = _mapper.Map<ResRegisterCustomerDto>(customerMap);
             return Ok("Successfully added");
-                
         }
     }
 }

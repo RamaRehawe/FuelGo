@@ -5,12 +5,15 @@
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public string OrderNumber { get; set; }
-        public double Lat { get; set; }
-        public double Long { get; set; }
+        public double? DriverLat { get; set; }
+        public double? DriverLong { get; set; }
+        public double? CustomerLat { get; set; }
+        public double? CustomerLong { get; set; }
         public string LocationDescription { get; set; }
         public int NeighborhoodId { get; set; }
         public int FuelTypeId { get; set; }
         public double OrderedQuantity { get; set; }
+        public double? Price { get; set; }
         public double? FinalQuantity { get; set; } // Nullable
         public double? FinalPrice { get; set; } // Nullable
         public bool IsItUrgent { get; set; }

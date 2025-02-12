@@ -8,7 +8,8 @@
         ISystemAdminRepository _systemAdminRepository { get; }
         IUserRepository _userRepository { get; }
         IDriverRepository _driverRepository { get; }
-
+        ICustomerCarRepository _customerCarRepository { get; }
+        ICustomerApartmentRepository _customerApartmentRepository { get; }
         void Commit();
     }
 }

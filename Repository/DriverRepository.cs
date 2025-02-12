@@ -11,6 +11,11 @@ namespace FuelGo.Repository
         {
         }
 
+        public Order GetActiveOrderByDriverId(int driverId)
+        {
+            return _context.Orders.Where(o => o.DriverId == driverId && o.IsActive == true).FirstOrDefault();
+        }
+
         public ICollection<Order> GetPendingOrders(int statusId)
         {
             return _context.Orders.Where(o => o.StatusId == statusId).ToList();

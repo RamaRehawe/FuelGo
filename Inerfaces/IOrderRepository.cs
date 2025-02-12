@@ -1,5 +1,4 @@
 ﻿using FuelGo.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace FuelGo.Inerfaces
 {
@@ -19,6 +18,6 @@ namespace FuelGo.Inerfaces
         Truck GetTruck(int? truckId);
         Driver GetDriver(int userId);
         bool UpdateOrder(Order order);
-        
+        Order GetActiveOrderByCustomerId(int customerId);
     }
 }
