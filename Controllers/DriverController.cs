@@ -10,11 +10,12 @@ namespace FuelGo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DriverController : OrderController
+    public class DriverController : BaseController
     {
         private readonly IMapper _mapper;
 
-        public DriverController(UserInfoService userInfoService, IUnitOfWork unitOfWork, IMapper mapper) : base(userInfoService, unitOfWork, mapper)
+        public DriverController(UserInfoService userInfoService, IUnitOfWork unitOfWork, IMapper mapper) : 
+            base(userInfoService, unitOfWork)
         {
             _mapper = mapper;
         }
