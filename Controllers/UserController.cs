@@ -18,9 +18,9 @@ namespace FuelGo.Controllers
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
-        public UserController(UserInfoService userInfoService, IUserRepository userRepository,
+        public UserController(UserInfoService userInfoService, IUnitOfWork unitOfWork, 
             IMapper mapper, IConfiguration configuration) : 
-            base(userInfoService, userRepository)
+            base(userInfoService, unitOfWork)
         {
             _mapper = mapper;
             _configuration = configuration;
@@ -31,13 +31,13 @@ namespace FuelGo.Controllers
         [ProducesResponseType(500)]
         public async Task<IActionResult> Login(ReqLoginDto loginDto)
         {
-            var user = _userRepository.GetUserByPhone(loginDto.Phone);
+            var user = _unitOfWork._userRepository.GetUserByPhone(loginDto.Phone);
             if (user == null || user.Password != loginDto.Password)
                 return Unauthorized("Invalid Phone or Password");
             // Generate JWT token
             var token = GenerateJwtToken(user.Phone, user.Role);
             // Update the token for the user in the database
-            await _userRepository.UpdateTokenByPhoneAsync(user.Phone, token);
+            await _unitOfWork._userRepository.UpdateTokenByPhoneAsync(user.Phone, token);
             // Return the token in the response
             return Ok(new { Token = token });
         }

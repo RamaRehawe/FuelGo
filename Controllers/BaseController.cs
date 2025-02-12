@@ -8,18 +8,18 @@ namespace FuelGo.Controllers
     public class BaseController : Controller
     {
         protected readonly UserInfoService _userInfoService;
-        protected readonly IUserRepository _userRepository;
+        protected readonly IUnitOfWork _unitOfWork;
 
-        public BaseController(UserInfoService userInfoService, IUserRepository userRepository)
+        public BaseController(UserInfoService userInfoService, IUnitOfWork unitOfWork)
         {
             _userInfoService = userInfoService;
-            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
         }
 
         protected User? GetActiveUser()
         {
             var phone = _userInfoService.GetUserIdFromToken();
-            var user = _userRepository.GetUserByPhone(phone);
+            var user = _unitOfWork._userRepository.GetUserByPhone(phone);
             return user;
         }
     }

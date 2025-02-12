@@ -11,11 +11,11 @@ namespace FuelGo.Controllers
     public class CustomerController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly ICustomerRepository _customerRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CustomerController(ICustomerRepository customerRepository, IMapper mapper)
+        public CustomerController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _customerRepository = customerRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
         [HttpPost("Register")]
@@ -27,7 +27,7 @@ namespace FuelGo.Controllers
             if (register == null)
                 return BadRequest(ModelState);
 
-            var customer = _customerRepository.GetUsers()
+            var customer = _unitOfWork._customerRepository.GetUsers()
                 .Where(c => c.Phone == register.Phone).FirstOrDefault();
             if(customer != null)
             {
@@ -37,7 +37,7 @@ namespace FuelGo.Controllers
             var customerMap = _mapper.Map<User>(register);
             customerMap.CreatedAt = DateTime.Now;
             customerMap.Role = "Customer";
-            if(!_customerRepository.RegisterCustomer(customerMap))
+            if(!_unitOfWork._customerRepository.RegisterCustomer(customerMap))
             {
                 ModelState.AddModelError("", "Somthing went wrong while saving");
                 return StatusCode(500, ModelState);

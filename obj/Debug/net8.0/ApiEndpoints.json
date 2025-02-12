@@ -40,6 +40,28 @@
     ]
   },
   {
+    "ContainingType": "FuelGo.Controllers.AdminController",
+    "Method": "AddTruck",
+    "RelativePath": "api/Admin/add-truck",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "truckData",
+        "Type": "FuelGo.Dto.ReqTruckAddingDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 201
+      }
+    ]
+  },
+  {
     "ContainingType": "FuelGo.Controllers.CustomerController",
     "Method": "RegisterCustomer",
     "RelativePath": "api/Customer/Register",
@@ -84,6 +106,59 @@
     ]
   },
   {
+    "ContainingType": "FuelGo.Controllers.OrderController",
+    "Method": "AcceptOrder",
+    "RelativePath": "api/Order/accept-order",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderData",
+        "Type": "FuelGo.Dto.ReqAcceptOrderDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "FuelGo.Controllers.OrderController",
+    "Method": "PlaceCarOrder",
+    "RelativePath": "api/Order/place-car-order",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderData",
+        "Type": "FuelGo.Dto.ReqPlaceCarOrderDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "FuelGo.Dto.ResPlaceCarOrderDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 201
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
     "ContainingType": "FuelGo.Controllers.SystemAdminController",
     "Method": "AddAdmin",
     "RelativePath": "api/SystemAdmin/add-Admin",
@@ -120,6 +195,28 @@
         "Type": "System.Void",
         "MediaTypes": [],
         "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "FuelGo.Controllers.SystemAdminController",
+    "Method": "AddCenter",
+    "RelativePath": "api/SystemAdmin/add-center",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "centerData",
+        "Type": "FuelGo.Dto.ReqCenterAddingDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 201
       }
     ]
   },
