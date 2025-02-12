@@ -1,6 +1,6 @@
 ﻿namespace FuelGo.Dto
 {
-    public class ReqAddCarDto
+    public class AddCarDto
     {
         public string PlateNumber { get; set; }
         public string Brand { get; set; }

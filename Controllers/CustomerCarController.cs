@@ -20,9 +20,9 @@ namespace FuelGo.Controllers
         }
 
         [HttpPost("add-car")]
-        [ProducesResponseType(201, Type = typeof(ReqAddCarDto))]
+        [ProducesResponseType(201, Type = typeof(AddCarDto))]
         [Authorize(Roles = "Customer")]
-        public IActionResult AddCar(ReqAddCarDto carData)
+        public IActionResult AddCar(AddCarDto carData)
         {
             if (carData == null)
                 return BadRequest(ModelState);
