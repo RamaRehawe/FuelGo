@@ -33,6 +33,8 @@ namespace FuelGo.Controllers
             if (orderData == null)
                 return BadRequest(ModelState);
             var orderMap = _mapper.Map<Order>(orderData);
+            orderMap.CustomerLat = orderData.CustomerLat;
+            orderMap.CustomerLong = orderData.CustomerLong;
             orderMap.Date = DateTime.Now;
             orderMap.OrderNumber = GenerateRandomCode(6);
             orderMap.IsItUrgent = false;
@@ -66,35 +68,17 @@ namespace FuelGo.Controllers
             return Ok(resOrder);
         }
 
-        [HttpPost("accept-order")]
-        [Authorize(Roles = "Driver")]
+        [HttpGet("track-order")]
         [ProducesResponseType(200)]
-        public IActionResult AcceptOrder(ReqAcceptOrderDto orderData)
+        public IActionResult TrackOrder()
         {
-            if (orderData == null)
-                return BadRequest(ModelState);
-            var order = _unitOfWork._orderRepository.GetOrder(orderData.OrderNumber);
-            if (order == null)
-                return NotFound("Order not found.");
-            var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "في الطريق").FirstOrDefault().Id;
-            var fuelPrice = _unitOfWork._orderRepository.GetFuelPrice(order.FuelTypeId);
-            var driverId = _unitOfWork._orderRepository.GetDriverId(base.GetActiveUser()!.Id);
-            var driver = _unitOfWork._orderRepository.GetDriver(base.GetActiveUser()!.Id);
-            var truck = _unitOfWork._orderRepository.GetTruck(driver.TruckId);
-            order.StatusId = statusId;
-            order.DriverId = driverId;
-            order.FinalPrice = (fuelPrice * order.OrderedQuantity) + 
-                CalculateDeliveryPrice(order.Lat, order.Long, truck.Lat, truck.Long, order.OrderedQuantity);
-            order.IsActive = true;
-            if(!_unitOfWork._orderRepository.UpdateOrder(order))
-            {
-                ModelState.AddModelError("", "Somthing went wrong while saving");
-                return StatusCode(500, ModelState);
-            }
-            var resOrder = _mapper.Map<ResPendingOrdersDto>(order);
-            return Ok(resOrder);
+            var userId = base.GetActiveUser()!.Id;
+            var customerId = _unitOfWork._orderRepository.GetCustomerId(userId);
+            var order = _unitOfWork._orderRepository.GetActiveOrderByCustomerId(customerId);
+
+            return Ok(_unitOfWork._orderRepository.GetStatuses().Where(o => o.Id == order.StatusId).FirstOrDefault().Name);
         }
-        private string GenerateRandomCode(int length)
+        protected string GenerateRandomCode(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             string orderNum;
@@ -111,7 +95,7 @@ namespace FuelGo.Controllers
         }
 
         // calculate the delivery price.
-        private double CalculateDeliveryPrice(double customerLat, double customerLong, double driverLat, double driverLong,
+        protected double CalculateDeliveryPrice(double? customerLat, double? customerLong, double? driverLat, double? driverLong,
             double orderedLiters)
         {
             // Retrieve the free delivery threshold (in liters)
@@ -121,21 +105,21 @@ namespace FuelGo.Controllers
             {
                 return 0.0;
             }
-            // Calculate the distance in meters using the Haversine formula.
-            double distanceInMeters = HaversineDistance(customerLat, customerLong, driverLat, driverLong);
+            // Calculate the distance in kelo meters using the Haversine formula.
+            double distanceInKeloMeters = HaversineDistance(customerLat, customerLong, driverLat, driverLong);
 
             // adjust the distance if needed (e.g., unit conversion)
             double distanceConversionFactor = GetConstantValue("DistanceConversionFactor");
-            double effectiveDistance = distanceInMeters * distanceConversionFactor;
+            double effectiveDistance = distanceInKeloMeters * distanceConversionFactor;
 
             // Retrieve constant values
-            double chargePerMeter = GetConstantValue("DeliveryChargePerMeter");
+            double chargePerMeter = GetConstantValue("DeliveryChargePerKeloMeter");
             double minCharge = GetConstantValue("MinimumDeliveryCharge");
             double maxCharge = GetConstantValue("MaximumDeliveryCharge");
             double fuelSurchargePercentage = GetConstantValue("FuelSurchargePercentage");
 
             // Calculate the base price
-            double basePrice = effectiveDistance * chargePerMeter;
+            double basePrice = distanceInKeloMeters * chargePerMeter;
 
             // Enforce the minimum and maximum charges
             double price = Math.Max(basePrice, minCharge);
@@ -147,12 +131,12 @@ namespace FuelGo.Controllers
             return finalPrice;
         }
 
-        private double GetConstantValue(string key)
+        protected double GetConstantValue(string key)
         {
             return _unitOfWork._orderRepository.GetConstant(key);
         }
         // Haversine formula to calculate distance between two points specified by latitude and longitude.
-        private double HaversineDistance(double lat1, double lon1, double lat2, double lon2)
+        protected double HaversineDistance(double? lat1, double? lon1, double? lat2, double? lon2)
         {
             const double EarthRadiusKm = 6371.0; // Earth's radius in kilometers
 
@@ -165,12 +149,12 @@ namespace FuelGo.Controllers
             double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
 
             // Distance in kilometers, convert to meters
-            double distanceInMeters = EarthRadiusKm * c * 1000;
-            return distanceInMeters;
+            double distanceInKeloMeters = EarthRadiusKm * c;
+            return distanceInKeloMeters;
         }
-        private double DegreesToRadians(double degrees)
+        private double DegreesToRadians(double? degrees)
         {
-            return degrees * Math.PI / 180.0;
+            return (double)(degrees * Math.PI / 180.0);
         }
 
     }

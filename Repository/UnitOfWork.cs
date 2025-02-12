@@ -12,9 +12,13 @@ namespace FuelGo.Repository
         public ISystemAdminRepository _systemAdminRepository { get; private set; }
         public IUserRepository _userRepository { get; private set; }
         public IDriverRepository _driverRepository { get; private set; }
+        public ICustomerCarRepository _customerCarRepository { get; private set; }
+        public ICustomerApartmentRepository _customerApartmentRepository { get; private set; }
         public UnitOfWork(DataContext context, IAdminRepository adminRepository, 
             ICustomerRepository customerRepository, IOrderRepository orderRepository, 
-            ISystemAdminRepository systemAdminRepository, IUserRepository userRepository, IDriverRepository driverRepository)
+            ISystemAdminRepository systemAdminRepository, IUserRepository userRepository, 
+            IDriverRepository driverRepository, ICustomerCarRepository customerCarRepository,
+            ICustomerApartmentRepository customerApartmentRepository)
         {
             _context = context;
             _adminRepository = adminRepository;
@@ -23,6 +27,8 @@ namespace FuelGo.Repository
             _systemAdminRepository = systemAdminRepository;
             _userRepository = userRepository;
             _driverRepository = driverRepository;
+            _customerCarRepository = customerCarRepository;
+            _customerApartmentRepository = customerApartmentRepository;
         }
 
         public void Commit()

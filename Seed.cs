@@ -22,11 +22,46 @@ namespace FuelGo
             {
                 var shifts = new List<Shift>
                 {
-                    new Shift { ShiftName = "Morning Shift", StartTime = 6.00, EndTime = 14.00, WorkingDays = "All-Week", HolidayDays = null },
-                    new Shift { ShiftName = "Midday Shift", StartTime = 12.00, EndTime = 20.00, WorkingDays = "All-Week", HolidayDays = null },
-                    new Shift { ShiftName = "Evening Shift", StartTime = 14.00, EndTime = 22.00, WorkingDays = "All-Week", HolidayDays = null },
-                    new Shift { ShiftName = "Night Shift", StartTime = 20.00, EndTime = 4.00, WorkingDays = "All-Week", HolidayDays = null },
-                    new Shift { ShiftName = "Graveyard Shift", StartTime = 22.00, EndTime = 6.00, WorkingDays = "All-Week", HolidayDays = null },
+                    new Shift
+                    {
+                        ShiftName = "الوردية الصباحية",
+                        StartTime = 6.00,
+                        EndTime = 14.00,
+                        WorkingDays = "طوال الأسبوع",
+                        HolidayDays = null
+                    },
+                    new Shift
+                    {
+                        ShiftName = "الوردية الظهرية",
+                        StartTime = 12.00,
+                        EndTime = 20.00,
+                        WorkingDays = "طوال الأسبوع",
+                        HolidayDays = null
+                    },
+                    new Shift
+                    {
+                        ShiftName = "الوردية المسائية",
+                        StartTime = 14.00,
+                        EndTime = 22.00,
+                        WorkingDays = "طوال الأسبوع",
+                        HolidayDays = null
+                    },
+                    new Shift
+                    {
+                        ShiftName = "الوردية الليلية",
+                        StartTime = 20.00,
+                        EndTime = 4.00,
+                        WorkingDays = "طوال الأسبوع",
+                        HolidayDays = null
+                    },
+                    new Shift
+                    {
+                        ShiftName = "الوردية الليلية المتأخرة",
+                        StartTime = 22.00,
+                        EndTime = 6.00,
+                        WorkingDays = "طوال الأسبوع",
+                        HolidayDays = null
+                    },
                 };
 
                 dataContext.Shifts.AddRange(shifts);
@@ -264,7 +299,7 @@ namespace FuelGo
             // bring ids
             var centerId = (dataContext.Centers.Where(c => c.Name == "مركز دمشق").FirstOrDefault()).Id;
             var statusId = (dataContext.Statuses.Where(s => s.Name == "نشط").FirstOrDefault()).Id;
-            var shiftId = (dataContext.Shifts.Where(s => s.ShiftName == "Morning Shift").FirstOrDefault()).Id;
+            var shiftId = (dataContext.Shifts.Where(s => s.ShiftName == "الوردية الصباحية").FirstOrDefault()).Id;
             var truckId = (dataContext.Trucks.Where(t => t.PlateNumber == "ABC-123").FirstOrDefault()).Id;
             // seeding users
             if (!dataContext.Users.Any())
@@ -518,7 +553,7 @@ namespace FuelGo
                 var constants = new List<ConstantDictionary>
                 {
                     // Charge 0.5 (currency units) per meter delivered.
-                    new ConstantDictionary { Key = "DeliveryChargePerMeter", Value = 1000.0 },
+                    new ConstantDictionary { Key = "DeliveryChargePerKeloMeter", Value = 1000.0 },
 
                     // The minimum delivery fee is 2.0 (currency units).
                     new ConstantDictionary { Key = "MinimumDeliveryCharge", Value = 5000.0 },
@@ -643,8 +678,8 @@ namespace FuelGo
                     {
                         Date = DateTime.UtcNow,
                         OrderNumber = "ORD-1001",
-                        Lat = 33.5138,
-                        Long = 36.2765,
+                        CustomerLat = 33.5138,
+                        CustomerLong = 36.2765,
                         LocationDescription = "شارع الحرية",
                         NeighborhoodId = 1, // Assumes neighborhood with ID=1 exists (e.g., "المزة" in دمشق)
                         FuelTypeId = fuelType != null ? fuelType.Id : 1, // Default to 1 if not found
