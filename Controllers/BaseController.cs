@@ -76,7 +76,7 @@ namespace FuelGo.Controllers
 
             // Apply the fuel surcharge percentage
             double finalPrice = price + (price * fuelSurchargePercentage / 100.0);
-
+            Console.WriteLine(price + " " + finalPrice);
             return finalPrice;
         }
 

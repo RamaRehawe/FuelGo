@@ -40,6 +40,7 @@ namespace FuelGo.Controllers
             var driver = _unitOfWork._orderRepository.GetDriver(userId);
             var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "متاح").FirstOrDefault();
             driver.Status = statusId;
+            driver.IsDriving = true;
             _unitOfWork.Commit();
             return Ok("Started");
         }
@@ -55,16 +56,19 @@ namespace FuelGo.Controllers
             if (order == null)
                 return NotFound("Order not found.");
             var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "في الطريق").FirstOrDefault().Id;
-            var fuelPrice = _unitOfWork._orderRepository.GetFuelPrice(order.FuelTypeId);
+            
             var driverId = _unitOfWork._orderRepository.GetDriverId(base.GetActiveUser()!.Id);
             var driver = _unitOfWork._orderRepository.GetDriver(base.GetActiveUser()!.Id);
             var truck = _unitOfWork._orderRepository.GetTruck(driver.TruckId);
+            var fuelPrice = _unitOfWork._orderRepository.GetFuelPrice(order.FuelTypeId);
+            order.Price = (fuelPrice * order.OrderedQuantity) +
+                CalculateDeliveryPrice(order.CustomerLat, order.CustomerLong, truck.Lat, truck.Long,
+                order.OrderedQuantity);
             order.StatusId = statusId;
             order.DriverId = driverId;
             order.DriverLat = truck.Lat;
             order.DriverLong = truck.Long;
-            order.Price = (fuelPrice * order.OrderedQuantity) +
-                CalculateDeliveryPrice(order.CustomerLat, order.CustomerLong, truck.Lat, truck.Long, order.OrderedQuantity);
+            
             order.IsActive = true;
             if (!_unitOfWork._orderRepository.UpdateOrder(order))
             {
@@ -131,7 +135,6 @@ namespace FuelGo.Controllers
             var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "تم التسليم").FirstOrDefault().Id;
             order.FinalQuantity = quantity;
             order.StatusId = statusId;
-            order.IsActive = false;
             var fuelPrice = _unitOfWork._orderRepository.GetFuelPrice(order.FuelTypeId);
             order.FinalPrice = (fuelPrice * quantity) +
                 CalculateDeliveryPrice(order.CustomerLat, order.CustomerLong, order.DriverLat, order.DriverLong, 
@@ -141,7 +144,8 @@ namespace FuelGo.Controllers
             {
                 order.FinalPrice += 10000;
             }
-            _unitOfWork.Commit();
+            _unitOfWork._driverRepository.UpdateOrder(order);
+            
             return Ok("Order Completeed");
         }
 

@@ -6,5 +6,6 @@ namespace FuelGo.Inerfaces
     {
         ICollection<Order> GetPendingOrders(int statusId);
         Order GetActiveOrderByDriverId(int driverId);
+        void UpdateOrder(Order order);
     }
 }

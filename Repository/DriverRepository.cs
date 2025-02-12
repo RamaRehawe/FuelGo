@@ -21,6 +21,11 @@ namespace FuelGo.Repository
             return _context.Orders.Where(o => o.StatusId == statusId).ToList();
         }
 
-        
+        public void UpdateOrder(Order order)
+        {
+            order.IsActive = null;
+            _context.Update(order);
+            _context.SaveChanges();
+        }
     }
 }

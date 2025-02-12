@@ -5,6 +5,7 @@ using FuelGo.Models;
 using FuelGo.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using System.Text;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -42,7 +43,8 @@ namespace FuelGo.Controllers
             orderMap.StatusId = statusId;
             orderMap.IsActive = true;
             orderMap.AuthCode = GenerateRandomCode(10);
-            if(!_unitOfWork._orderRepository.AddOrder(orderMap))
+            
+            if (!_unitOfWork._orderRepository.AddOrder(orderMap))
             {
                 ModelState.AddModelError("", "Somthing went wrong while saving");
                 return StatusCode(500, ModelState);

@@ -1,4 +1,5 @@
 using FuelGo;
+using FuelGo.Controllers;
 using FuelGo.Data;
 using FuelGo.Inerfaces;
 using FuelGo.Repository;

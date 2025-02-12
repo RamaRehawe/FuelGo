@@ -539,7 +539,7 @@ namespace FuelGo
                     {
                         FuelTypeId = 2,  // e.g., مازوت
                         CenterId = 2,
-                        Price = 12000
+                        Price = 9000
                     }
                 };
 
@@ -552,7 +552,7 @@ namespace FuelGo
             {
                 var constants = new List<ConstantDictionary>
                 {
-                    // Charge 0.5 (currency units) per meter delivered.
+                    // Charge 0.5 (currency units) per Kelo meter delivered.
                     new ConstantDictionary { Key = "DeliveryChargePerKeloMeter", Value = 1000.0 },
 
                     // The minimum delivery fee is 2.0 (currency units).
