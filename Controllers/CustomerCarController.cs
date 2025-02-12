@@ -42,5 +42,23 @@ namespace FuelGo.Controllers
             }
             return Ok(carData);
         }
+
+        [HttpPatch("delete-car")]
+        public IActionResult DeleteCar(string plateNum)
+        {
+            if(plateNum == null)
+            {
+                return BadRequest(ModelState);
+            }
+            var car = _unitOfWork._customerCarRepository.GetCars().Where(cc => cc.PlateNumber == plateNum).FirstOrDefault();
+            if(car == null)
+            {
+                ModelState.AddModelError("", "Car not found");
+                return StatusCode(404, ModelState);
+            }
+            car.IsDeleted = true;
+            _unitOfWork.Commit();
+            return Ok("Car Deleted Successfully");
+        }
     }
 }
