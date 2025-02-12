@@ -1,5 +1,4 @@
 ﻿using FuelGo.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace FuelGo.Inerfaces
 {
