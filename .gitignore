@@ -1,0 +1,15 @@
+# Ignore build and intermediate files
+bin/
+obj/
+/bin/Debug/net8.0/FuelGo.dll
+/bin/Debug/net8.0/FuelGo.exe
+/bin/Debug/net8.0/FuelGo.pdb
+/obj/Debug/net8.0/ref/FuelGo.dll
+/obj/Debug/net8.0/refint/FuelGo.dll
+/obj/Debug/net8.0/apphost.exe
+/obj/Debug/net8.0/FuelGo.AssemblyInfo.cs
+/obj/Debug/net8.0/FuelGo.AssemblyInfoInputs.cache
+/obj/Debug/net8.0/FuelGo.csproj.CoreCompileInputs.cache
+/obj/Debug/net8.0/FuelGo.dll
+/obj/Debug/net8.0/FuelGo.pdb
+/obj/Debug/net8.0/FuelGo.sourcelink.json
