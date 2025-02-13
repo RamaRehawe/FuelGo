@@ -105,5 +105,24 @@ namespace FuelGo.Controllers
         {
             return (double)(degrees * Math.PI / 180.0);
         }
+
+        protected TimeSpan? CalculateEstimatedTime(Order order)
+        {
+            var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "قيد الانتظار").FirstOrDefault().Id;
+
+            if (order.StatusId == statusId)
+                return null; // No estimate for pending orders
+
+            double distanceKm = GetDistance(order.DriverLat, order.DriverLong, order.CustomerLat, order.CustomerLong);
+            double avgSpeedKmPerHour = 50; // Example speed (adjust as needed)
+
+            double estimatedHours = distanceKm / avgSpeedKmPerHour;
+            return TimeSpan.FromHours(estimatedHours);
+        }
+        protected double GetDistance(double? driverLat, double? driverLong, double? customerLat, double? customerLong)
+        {
+            // Use Haversine formula or Google Maps API
+            return HaversineDistance(driverLat, driverLong, customerLat, customerLong);
+        }
     }
 }

@@ -122,8 +122,16 @@ namespace FuelGo.Controllers
             var userId = base.GetActiveUser()!.Id;
             var customerId = _unitOfWork._orderRepository.GetCustomerId(userId);
             var order = _unitOfWork._orderRepository.GetActiveOrderByCustomerId(customerId);
-
-            return Ok(_unitOfWork._orderRepository.GetStatuses().Where(o => o.Id == order.StatusId).FirstOrDefault().Name);
+            if (order == null)
+                return NotFound("No active order found.");
+            var status = _unitOfWork._orderRepository.GetStatuses()
+                  .FirstOrDefault(o => o.Id == order.StatusId)?.Name;
+            TimeSpan? estimatedTime = CalculateEstimatedTime(order);
+            return Ok(new
+            {
+                Status = status,
+                EstimatedDeliveryTime = estimatedTime?.ToString(@"hh\:mm\:ss") ?? "Calculating..."
+            });
         }
         
 
