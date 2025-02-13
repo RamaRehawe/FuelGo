@@ -27,6 +27,8 @@ namespace FuelGo.Helper
             CreateMap<CustomerCar, AddCarDto>().ReverseMap();
             CreateMap<CustomerApartment, ReqAddApartmentDto>().ReverseMap();
             CreateMap<CustomerApartment, ResAddApartmentDto>().ReverseMap();
+            CreateMap<Order, ResPlaceHouseOrderDto>().ReverseMap();
+            CreateMap<Order, ReqPlaceHouseOrderDto>().ReverseMap();
         }
     }
 }

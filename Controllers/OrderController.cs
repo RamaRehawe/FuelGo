@@ -69,6 +69,52 @@ namespace FuelGo.Controllers
             return Ok(resOrder);
         }
 
+        [HttpPost("place-house-order")]
+        [Authorize(Roles = "Customer")]
+        [ProducesResponseType(201, Type = typeof(ResPlaceHouseOrderDto))]
+        [ProducesResponseType(500)]
+        public IActionResult PlaceHouseOrder(ReqPlaceHouseOrderDto orderData)
+        {
+            if (orderData == null)
+                return BadRequest(ModelState);
+            var orderMap = _mapper.Map<Order>(orderData);
+            orderMap.Date = DateTime.Now;
+            orderMap.OrderNumber = GenerateRandomCode(6);
+            var apt = _unitOfWork._orderRepository.GetApartmentById(orderData.CustomerApartmentId);
+            orderMap.CustomerLat = apt.Lat;
+            orderMap.CustomerLong = apt.Long;
+            orderMap.LocationDescription = apt.LocationDescription;
+            orderMap.NeighborhoodId = apt.NeighborhoodId;
+            orderMap.IsItUrgent = false;
+            orderMap.CustomerId = _unitOfWork._orderRepository.GetCustomerId(base.GetActiveUser()!.Id);
+            var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "قيد الانتظار").FirstOrDefault().Id;
+            orderMap.StatusId = statusId;
+            orderMap.IsActive = true;
+            orderMap.AuthCode = GenerateRandomCode(10);
+
+            if (!_unitOfWork._orderRepository.AddOrder(orderMap))
+            {
+                ModelState.AddModelError("", "Somthing went wrong while saving");
+                return StatusCode(500, ModelState);
+            }
+            var neighborhoodName = _unitOfWork._orderRepository.GetNeighborhoodName(orderMap.NeighborhoodId);
+            var cityName = _unitOfWork._orderRepository.GetCityName(orderMap.NeighborhoodId);
+            var fuelName = _unitOfWork._orderRepository.GetFuelName(orderMap.FuelTypeId);
+            var resOrder = new ResPlaceHouseOrderDto
+            {
+                Date = orderMap.Date,
+                OrderNumber = orderMap.OrderNumber,
+                LocationDescription = orderMap.LocationDescription,
+                NeighborhoodName = neighborhoodName,
+                CityName = cityName,
+                FuelTypeName = fuelName,
+                OrderedQuantity = orderMap.OrderedQuantity,
+                StatusName = "قيد الانتظار",
+                Apartment = apt
+            };
+            return Ok(resOrder);
+        }
+
         [HttpGet("track-order")]
         [ProducesResponseType(200)]
         public IActionResult TrackOrder()

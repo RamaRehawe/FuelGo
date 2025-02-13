@@ -19,5 +19,6 @@ namespace FuelGo.Inerfaces
         Driver GetDriver(int userId);
         bool UpdateOrder(Order order);
         Order GetActiveOrderByCustomerId(int customerId);
+        CustomerApartment GetApartmentById(int? id);
     }
 }
