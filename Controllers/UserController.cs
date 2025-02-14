@@ -43,6 +43,25 @@ namespace FuelGo.Controllers
         }
 
 
+        [HttpPut("edit-password")]
+        [Authorize]
+        public IActionResult EditPassword(ReqEditPasswordDto editeData)
+        {
+            var user = base.GetActiveUser()!;
+            if(user.Password != editeData.OldPassword)
+            {
+                return BadRequest("The old password is incorrect.");
+            }
+            if(editeData.Password != editeData.RePassword)
+            {
+                return BadRequest("New password and repeated password do not match.");
+            }
+            user.Password = editeData.Password;
+            _unitOfWork.Commit();
+            return Ok("Password updated");
+        }
+
+
         private string GenerateJwtToken(string username, string role)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
