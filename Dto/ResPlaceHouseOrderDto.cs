@@ -1,6 +1,8 @@
-﻿namespace FuelGo.Dto
+﻿using FuelGo.Models;
+
+namespace FuelGo.Dto
 {
-    public class ResPlaceCarOrderDto
+    public class ResPlaceHouseOrderDto
     {
         public DateTime Date { get; set; }
         public string OrderNumber { get; set; }
@@ -9,7 +11,7 @@
         public string CityName { get; set; }
         public string FuelTypeName { get; set; }
         public double OrderedQuantity { get; set; }
-        public string CustomerCarBrand { get; set; }
         public string StatusName { get; set; }
+        public CustomerApartment Apartment { get; set; }
     }
 }
