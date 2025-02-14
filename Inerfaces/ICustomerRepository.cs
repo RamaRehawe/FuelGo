@@ -7,6 +7,7 @@ namespace FuelGo.Inerfaces
         ICollection<User> GetUsers();
         bool UserExist(int id);
         bool RegisterCustomer(User user);
+        Customer GetPropretiesByUser(int userId);
         bool Save();
     }
 }
