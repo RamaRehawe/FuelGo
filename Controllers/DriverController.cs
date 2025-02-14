@@ -38,11 +38,24 @@ namespace FuelGo.Controllers
         {
             var userId = base.GetActiveUser()!.Id;
             var driver = _unitOfWork._orderRepository.GetDriver(userId);
-            var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "متاح").FirstOrDefault();
-            driver.Status = statusId;
+            var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "متاح").FirstOrDefault().Id;
+            driver.StatusId = statusId;
             driver.IsDriving = true;
             _unitOfWork.Commit();
             return Ok("Started");
+        }
+
+        [HttpPost("EndJob")]
+        [Authorize(Roles = "Driver")]
+        public IActionResult EndJob()
+        {
+            var userId = base.GetActiveUser()!.Id;
+            var driver = _unitOfWork._orderRepository.GetDriver(userId);
+            var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "غير متصل").FirstOrDefault().Id;
+            driver.StatusId = statusId;
+            driver.IsDriving = false;
+            _unitOfWork.Commit();
+            return Ok("Driver Ended Job");
         }
 
         [HttpPost("accept-order")]
