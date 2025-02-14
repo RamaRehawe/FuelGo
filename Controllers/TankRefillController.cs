@@ -28,6 +28,9 @@ namespace FuelGo.Controllers
             var driver = _unitOfWork._orderRepository.GetDriver(base.GetActiveUser()!.Id);
             refillMap.DriverId = driver.Id;
             refillMap.TruckId = (int)driver.TruckId;
+            var truck = _unitOfWork._orderRepository.GetTruck(driver.TruckId);
+            truck.CargoTankCapacity += refillMap.QuantityCargoRefill;
+            truck.FuelTankCapacity += refillMap.QuantityFuelRefill;
             if(!_unitOfWork._tankRefillRepository.Refill(refillMap))
             {
                 ModelState.AddModelError("", "Somthing went wrong while saving");
