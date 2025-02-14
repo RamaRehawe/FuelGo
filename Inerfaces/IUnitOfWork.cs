@@ -10,6 +10,7 @@
         IDriverRepository _driverRepository { get; }
         ICustomerCarRepository _customerCarRepository { get; }
         ICustomerApartmentRepository _customerApartmentRepository { get; }
+        IWalletRepository _walletRepository { get; }
         void Commit();
     }
 }
