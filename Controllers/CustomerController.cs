@@ -2,22 +2,24 @@
 using FuelGo.Dto;
 using FuelGo.Inerfaces;
 using FuelGo.Models;
+using FuelGo.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FuelGo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomerController : Controller
+    public class CustomerController : BaseController
     {
         private readonly IMapper _mapper;
-        private readonly IUnitOfWork _unitOfWork;
 
-        public CustomerController(IUnitOfWork unitOfWork, IMapper mapper)
+        public CustomerController(UserInfoService userInfoService, IUnitOfWork unitOfWork, IMapper mapper) : 
+            base(userInfoService, unitOfWork)
         {
-            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+
         [HttpPost("Register")]
         [ProducesResponseType(201, Type = typeof(ResRegisterCustomerDto))]
         [ProducesResponseType(400)]
@@ -44,6 +46,21 @@ namespace FuelGo.Controllers
             }
             var resCustomer = _mapper.Map<ResRegisterCustomerDto>(customerMap);
             return Ok("Successfully added");
+        }
+
+        [HttpGet("get-my-properties")]
+        [ProducesResponseType(200)]
+        [Authorize(Roles = "Customer")]
+        public IActionResult GetMYProperties()
+        {
+
+            var custProp = _mapper.Map<ResPropretiesDto>(
+                _unitOfWork._customerRepository.GetPropretiesByUser(base.GetActiveUser()!.Id)
+                );
+            if (custProp == null)
+                return NotFound();
+            
+            return Ok(custProp);
         }
     }
 }

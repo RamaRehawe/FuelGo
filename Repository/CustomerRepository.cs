@@ -1,6 +1,7 @@
 ﻿using FuelGo.Data;
 using FuelGo.Inerfaces;
 using FuelGo.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FuelGo.Repository
 {
@@ -10,6 +11,17 @@ namespace FuelGo.Repository
         public CustomerRepository(DataContext context)
         {
             _context = context;
+        }
+
+        public Customer GetPropretiesByUser(int userId)
+        {
+            return _context.Customers.AsNoTracking()
+                .Where(c => c.UserId == userId).
+                Include(c => c.CustomerCars).
+                Include(c => c.CustomerApartments)
+                    .ThenInclude(ca => ca.Neighborhood)
+                        .ThenInclude(n => n.City)
+                .FirstOrDefault()!;
         }
 
         public ICollection<User> GetUsers()
