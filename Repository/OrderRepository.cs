@@ -77,7 +77,10 @@ namespace FuelGo.Repository
             return _context.Orders.Where(o => o.OrderNumber == orderNumber).FirstOrDefault();
         }
 
-        
+        public ICollection<Order> GetOrders(int customerId)
+        {
+            return _context.Orders.Where(o => o.CustomerId == customerId).OrderBy(o => o.Id).ToList();
+        }
 
         public ICollection<Status> GetStatuses()
         {
