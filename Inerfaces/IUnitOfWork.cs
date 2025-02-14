@@ -11,6 +11,7 @@
         ICustomerCarRepository _customerCarRepository { get; }
         ICustomerApartmentRepository _customerApartmentRepository { get; }
         IWalletRepository _walletRepository { get; }
+        ITankRefillRepository _tankRefillRepository { get; }
         void Commit();
     }
 }

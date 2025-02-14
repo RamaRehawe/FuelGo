@@ -53,6 +53,7 @@ builder.Services.AddScoped<IDriverRepository, DriverRepository>();
 builder.Services.AddScoped<ICustomerCarRepository, CustomerCarRepository>();
 builder.Services.AddScoped<ICustomerApartmentRepository, CustomerApartmentRepository>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
+builder.Services.AddScoped<ITankRefillRepository, TankRefillRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
