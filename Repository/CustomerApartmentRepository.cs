@@ -15,5 +15,10 @@ namespace FuelGo.Repository
             _context.Add(customerApartment);
             return Save();
         }
+
+        public ICollection<CustomerApartment> GetApartment()
+        {
+            return _context.CustomerApartments.OrderBy(ca => ca.Id).ToList();
+        }
     }
 }

@@ -42,5 +42,21 @@ namespace FuelGo.Controllers
             resApt.CityName = cityName;
             return Ok(resApt);
         }
+
+        [HttpPatch("delete-apartment")]
+        public IActionResult DeleteApartment(int aptId)
+        {
+            if (aptId == null)
+                return BadRequest(ModelState);
+            var apt = _unitOfWork._customerApartmentRepository.GetApartment().Where(a => a.Id == aptId).FirstOrDefault();
+            if(apt == null)
+            {
+                ModelState.AddModelError("", "Apartment not found");
+                return StatusCode(404, ModelState);
+            }
+            apt.IsDeleted = true;
+            _unitOfWork.Commit();
+            return Ok("Apartment Deleted Successfully");
+        }
     }
 }
