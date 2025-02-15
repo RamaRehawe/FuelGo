@@ -15,7 +15,7 @@ namespace FuelGo.Inerfaces
         double GetConstant(string key);
         double GetFuelPrice(int fuelTypeId);
         Order GetOrder(string orderNumber);
-        ICollection<Order> GetOrders(int customerId);
+        
         Truck GetTruck(int? truckId);
         Driver GetDriver(int userId);
         bool UpdateOrder(Order order);
