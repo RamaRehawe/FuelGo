@@ -109,5 +109,15 @@ namespace FuelGo.Controllers
             _unitOfWork.Commit();
             return Ok("edited succesfully");
         }
+
+        [HttpGet("get-orders-by-center")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult GetOrdersByCenter()
+        {
+            var admin = _unitOfWork._adminRepository.GetAdminByUserId(base.GetActiveUser()!.Id);
+            var orders = _unitOfWork._adminRepository.GetOrdersByCenterId(admin.CenterId);
+            var resOrders = _mapper.Map<List<ResOrderDto>>(orders);
+            return Ok(resOrders);
+        }
     }
 }

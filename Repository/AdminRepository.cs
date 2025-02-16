@@ -1,6 +1,7 @@
 ﻿using FuelGo.Data;
 using FuelGo.Inerfaces;
 using FuelGo.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FuelGo.Repository
 {
@@ -47,6 +48,16 @@ namespace FuelGo.Repository
         public FuelDetail GetFuelByCenterAndFuelId(int centerId, int fuelTypeId)
         {
             return _context.FuelDetails.Where(fd => fd.FuelTypeId == fuelTypeId && fd.CenterId == centerId).FirstOrDefault();
+        }
+
+        public ICollection<Order> GetOrdersByCenterId(int centerId)
+        {
+            return _context.Orders.Where(o => o.Driver.CenterId == centerId)
+                .Include(o => o.Neighborhood)
+                .Include(o => o.FuelType)
+                .Include(o => o.CustomerApartment)
+                .Include(o => o.CustomerCar)
+                .OrderBy(o => o.Id).ToList();
         }
 
         public ICollection<Shift> GetShifts()
