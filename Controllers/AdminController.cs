@@ -148,5 +148,15 @@ namespace FuelGo.Controllers
             }
             return Ok(resTrucks);
         }
+
+        [HttpGet("get-shifts")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(200)]
+        public IActionResult GetShifts()
+        {
+            var shifts = _unitOfWork._adminRepository.GetShifts();
+            var resShifts = _mapper.Map<List<ResShiftsDto>>(shifts);
+            return Ok(resShifts);
+        }
     }
 }
