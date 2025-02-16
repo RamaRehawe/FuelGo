@@ -35,7 +35,7 @@ namespace FuelGo.Helper
             CreateMap<Order, ResOrderDto>().ReverseMap();
             CreateMap<Customer, ResPropretiesDto>().ReverseMap();
             CreateMap<User, ReqEditPasswordDto>().ReverseMap();
-
+            CreateMap<TruckTankRefill, ReqRefillDto>().ReverseMap();
         }
     }
 }
