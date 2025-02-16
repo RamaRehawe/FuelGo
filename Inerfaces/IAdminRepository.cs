@@ -14,5 +14,6 @@ namespace FuelGo.Inerfaces
         ICollection<Status> GetStatuses();
         Admin GetAdminByUserId(int userId);
         FuelDetail GetFuelByCenterAndFuelId(int centerId, int fuelTypeId);
+        ICollection<Order> GetOrdersByCenterId(int centerId);
     }
 }
