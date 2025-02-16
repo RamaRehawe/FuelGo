@@ -128,7 +128,8 @@ namespace FuelGo.Controllers
         {
             var admin = _unitOfWork._adminRepository.GetAdminByUserId(base.GetActiveUser()!.Id);
             var drivers = _unitOfWork._adminRepository.GetDriversByCenter(admin.CenterId);
-            return Ok(drivers);
+            var resDrivers = _mapper.Map<List<ResDriversDto>>(drivers);
+            return Ok(resDrivers);
         }
     }
 }

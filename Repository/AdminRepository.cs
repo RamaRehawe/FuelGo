@@ -47,7 +47,9 @@ namespace FuelGo.Repository
 
         public ICollection<Driver> GetDriversByCenter(int centerId)
         {
-            return _context.Drivers.Where(d => d.CenterId == centerId).ToList();
+            return _context.Drivers.Where(d => d.CenterId == centerId)
+                .Include(d => d.User)
+                .ToList();
         }
 
         public FuelDetail GetFuelByCenterAndFuelId(int centerId, int fuelTypeId)
