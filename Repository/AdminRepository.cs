@@ -77,9 +77,21 @@ namespace FuelGo.Repository
             return _context.Statuses.OrderBy(s => s.Id).ToList();
         }
 
+        public Truck GetTruckByPlateNumber(string plateNumber)
+        {
+            return _context.Trucks.Where(t => t.PlateNumber == plateNumber).FirstOrDefault();
+        }
+
         public ICollection<Truck> GetTrucks()
         {
             return _context.Trucks.OrderBy(t => t.Id).ToList();
+        }
+
+        public ICollection<Truck> GetTrucksByCenter(int centerId)
+        {
+            return _context.Trucks.Where(t => t.CenterId == centerId)
+                .Include(t => t.FuelType)
+                .ToList();
         }
     }
 }

@@ -16,5 +16,7 @@ namespace FuelGo.Inerfaces
         FuelDetail GetFuelByCenterAndFuelId(int centerId, int fuelTypeId);
         ICollection<Order> GetOrdersByCenterId(int centerId);
         ICollection<Driver> GetDriversByCenter(int centerId);
+        ICollection<Truck> GetTrucksByCenter(int centerId);
+        Truck GetTruckByPlateNumber(string plateNumber);
     }
 }
