@@ -163,5 +163,8 @@ namespace FuelGo.Controllers
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(200)]
         public IActionResult AddMoneyToWallet()
+        {
+            return Ok();
+        }
     }
 }

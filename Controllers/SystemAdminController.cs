@@ -83,5 +83,15 @@ namespace FuelGo.Controllers
             }
             return Ok("Successfully added");
         }
+
+        [HttpGet("get-all-orders")]
+        [ProducesResponseType(200)]
+        [Authorize(Roles = "SystemAdmin")]
+        public IActionResult GetOrders()
+        {
+            var orders = _unitOfWork._systemAdminRepository.GetOrders();
+            var resOrders = _mapper.Map<List<ResOrderDto>>(orders);
+            return Ok(resOrders);
+        }
     }
 }

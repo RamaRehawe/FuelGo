@@ -1,6 +1,7 @@
 ﻿using FuelGo.Data;
 using FuelGo.Inerfaces;
 using FuelGo.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FuelGo.Repository
 {
@@ -36,6 +37,16 @@ namespace FuelGo.Repository
         public ICollection<Center> GetCenters()
         {
             return _context.Centers.OrderBy(c => c.Id).ToList();
+        }
+
+        public ICollection<Order> GetOrders()
+        {
+            return _context.Orders
+                .Include(o => o.Neighborhood)
+                .Include(o => o.FuelType)
+                .Include(o => o.CustomerApartment)
+                .Include(o => o.CustomerCar)
+                .ToList();
         }
 
         public ICollection<Status> GetStatuses()
