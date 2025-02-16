@@ -172,5 +172,15 @@ namespace FuelGo.Controllers
             var resOrders = _mapper.Map<List<ResOrderDto>>(orders);
             return Ok(resOrders);
         }
+
+        [HttpGet("cargo-tank")]
+        [Authorize(Roles = "Driver")]
+        [ProducesResponseType(200)]
+        public IActionResult GetMyCargoTank()
+        {
+            var driver = _unitOfWork._orderRepository.GetDriver(base.GetActiveUser()!.Id);
+            var truck = _unitOfWork._orderRepository.GetTruck(driver.TruckId);
+            return Ok(truck.CargoTankCapacity);
+        }
     }
 }
