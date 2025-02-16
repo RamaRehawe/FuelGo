@@ -42,6 +42,10 @@ namespace FuelGo.Helper
                 .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.User.Phone))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
                 .ForMember(dest => dest.IsDriving, opt => opt.MapFrom(src => src.IsDriving));
+            CreateMap<Truck, ResTrucksDto>()
+                .ForMember(dest => dest.FuelTankTypeName, opt => opt.MapFrom(src => src.FuelType.Name))
+                .ForMember(dest => dest.CargoTankTypeName, opt => opt.MapFrom(src => src.FuelType.Name));
+
         }
     }
 }

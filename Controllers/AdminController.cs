@@ -131,5 +131,22 @@ namespace FuelGo.Controllers
             var resDrivers = _mapper.Map<List<ResDriversDto>>(drivers);
             return Ok(resDrivers);
         }
+
+        [HttpGet("get-trucks")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(200)]
+        public IActionResult GetTrucksByCenter()
+        {
+            var admin = _unitOfWork._adminRepository.GetAdminByUserId(base.GetActiveUser()!.Id);
+            var trucks = _unitOfWork._adminRepository.GetTrucksByCenter(admin.CenterId);
+            var resTrucks = _mapper.Map<List<ResTrucksDto>>(trucks);
+            foreach(var truck in resTrucks)
+            {
+                var tr = _unitOfWork._adminRepository.GetTruckByPlateNumber(truck.PlateNumber);
+                truck.FuelTankTypeName = _unitOfWork._orderRepository.GetFuelName(tr.FuelTankTypeId);
+                truck.CargoTankTypeName = _unitOfWork._orderRepository.GetFuelName(tr.CargoTankTypeId);
+            }
+            return Ok(resTrucks);
+        }
     }
 }
