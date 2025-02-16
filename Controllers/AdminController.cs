@@ -158,5 +158,10 @@ namespace FuelGo.Controllers
             var resShifts = _mapper.Map<List<ResShiftsDto>>(shifts);
             return Ok(resShifts);
         }
+
+        [HttpPost("add-money-to-wallet")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(200)]
+        public IActionResult AddMoneyToWallet()
     }
 }
