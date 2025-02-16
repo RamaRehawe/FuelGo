@@ -12,6 +12,7 @@ namespace FuelGo.Inerfaces
         Driver GetDriverByUserId(int id);
         bool AddTruck(Truck truck);
         ICollection<Status> GetStatuses();
-
+        Admin GetAdminByUserId(int userId);
+        FuelDetail GetFuelByCenterAndFuelId(int centerId, int fuelTypeId);
     }
 }

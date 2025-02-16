@@ -41,7 +41,7 @@ namespace FuelGo.Controllers
             driverMap.Password = "123456789";
             driverMap.CreatedAt = DateTime.Now;
             driverMap.UpdatedAt = DateTime.Now;
-            var adminId = base.GetActiveUser()!.Id;
+            var adminId = _unitOfWork._adminRepository.GetAdminByUserId(base.GetActiveUser()!.Id).Id;
             var center = _unitOfWork._adminRepository.GetCenterByAdminId(adminId);
             var shift = (_unitOfWork._adminRepository.GetShifts().Where(s => s.Id == driverData.ShiftId).FirstOrDefault());
             var truck = (_unitOfWork._adminRepository.GetTrucks().Where(t => t.Id == driverData.TruckId).FirstOrDefault());
@@ -85,7 +85,7 @@ namespace FuelGo.Controllers
                 return StatusCode(422, ModelState);
             }
             var truckMap = _mapper.Map<Truck>(truckData);
-            var adminId = base.GetActiveUser()!.Id;
+            var adminId = _unitOfWork._adminRepository.GetAdminByUserId(base.GetActiveUser()!.Id).Id;
             var center = _unitOfWork._adminRepository.GetCenterByAdminId(adminId);
             truckMap.CenterId = center.Id;
             if(!_unitOfWork._adminRepository.AddTruck(truckMap))
@@ -94,6 +94,20 @@ namespace FuelGo.Controllers
                 return StatusCode(500, ModelState);
             }
             return Ok("Added Successfully");
+        }
+
+        [HttpPost("edit-fuel-price")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(200)]
+        public IActionResult EditFuelPrice(ReqEditFuelPriceDto prices)
+        {
+            if (prices == null)
+                return BadRequest(ModelState);
+            var admin = _unitOfWork._adminRepository.GetAdminByUserId(base.GetActiveUser()!.Id);
+            var fuel = _unitOfWork._adminRepository.GetFuelByCenterAndFuelId(admin.CenterId, prices.FuelTypeId);
+            fuel.Price = prices.Price;
+            _unitOfWork.Commit();
+            return Ok("edited succesfully");
         }
     }
 }

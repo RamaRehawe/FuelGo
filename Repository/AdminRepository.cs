@@ -28,6 +28,11 @@ namespace FuelGo.Repository
             return Save();
         }
 
+        public Admin GetAdminByUserId(int userId)
+        {
+            return _context.Admins.Where(a => a.UserId == userId).FirstOrDefault();
+        }
+
         public Center GetCenterByAdminId(int adminId)
         {
             var admin = _context.Admins.Where(a => a.UserId == adminId).FirstOrDefault();
@@ -37,6 +42,11 @@ namespace FuelGo.Repository
         public Driver GetDriverByUserId(int id)
         {
             return _context.Drivers.Where(d => d.UserId == id).FirstOrDefault();
+        }
+
+        public FuelDetail GetFuelByCenterAndFuelId(int centerId, int fuelTypeId)
+        {
+            return _context.FuelDetails.Where(fd => fd.FuelTypeId == fuelTypeId && fd.CenterId == centerId).FirstOrDefault();
         }
 
         public ICollection<Shift> GetShifts()
