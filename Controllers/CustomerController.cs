@@ -62,5 +62,16 @@ namespace FuelGo.Controllers
             
             return Ok(custProp);
         }
+
+        [HttpGet("get-my-orders")]
+        [Authorize(Roles = "Customer")]
+        [ProducesResponseType(200)]
+        public IActionResult GetMyOrders()
+        {
+            var customerId = _unitOfWork._orderRepository.GetCustomerId(base.GetActiveUser()!.Id);
+            var orders = _unitOfWork._customerRepository.GetOrders(customerId);
+            var resOrders = _mapper.Map<List<ResOrderDto>>(orders);
+            return Ok(resOrders);
+        }
     }
 }

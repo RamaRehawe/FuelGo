@@ -162,6 +162,15 @@ namespace FuelGo.Controllers
             return Ok("Order Completeed");
         }
 
-        
+        [HttpGet("get-my-orders")]
+        [Authorize(Roles = "Driver")]
+        [ProducesResponseType(200)]
+        public IActionResult GetMyOrders()
+        {
+            var driverId = _unitOfWork._orderRepository.GetDriverId(base.GetActiveUser()!.Id);
+            var orders = _unitOfWork._driverRepository.GetOrders(driverId);
+            var resOrders = _mapper.Map<List<ResOrderDto>>(orders);
+            return Ok(resOrders);
+        }
     }
 }
