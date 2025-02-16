@@ -112,12 +112,24 @@ namespace FuelGo.Controllers
 
         [HttpGet("get-orders-by-center")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(200)]
         public IActionResult GetOrdersByCenter()
         {
             var admin = _unitOfWork._adminRepository.GetAdminByUserId(base.GetActiveUser()!.Id);
             var orders = _unitOfWork._adminRepository.GetOrdersByCenterId(admin.CenterId);
             var resOrders = _mapper.Map<List<ResOrderDto>>(orders);
             return Ok(resOrders);
+        }
+
+        [HttpGet("get-drivers")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(200)]
+        public IActionResult GetDrivers()
+        {
+            var admin = _unitOfWork._adminRepository.GetAdminByUserId(base.GetActiveUser()!.Id);
+            var drivers = _unitOfWork._adminRepository.GetDriversByCenter(admin.CenterId);
+            var resDrivers = _mapper.Map<List<ResDriversDto>>(drivers);
+            return Ok(resDrivers);
         }
     }
 }
