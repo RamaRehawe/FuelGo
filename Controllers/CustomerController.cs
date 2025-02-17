@@ -45,7 +45,14 @@ namespace FuelGo.Controllers
                 return StatusCode(500, ModelState);
             }
             var resCustomer = _mapper.Map<ResRegisterCustomerDto>(customerMap);
-            return Ok("Successfully added");
+            int statusCode = 200; // Example
+            return Ok(new ResponseDto<ResRegisterCustomerDto>
+            {
+                StatusCode = statusCode,
+                Data = resCustomer
+            });
+
+
         }
 
         [HttpGet("get-my-properties")]
