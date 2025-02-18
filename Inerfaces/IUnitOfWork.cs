@@ -12,6 +12,7 @@
         ICustomerApartmentRepository _customerApartmentRepository { get; }
         IWalletRepository _walletRepository { get; }
         ITankRefillRepository _tankRefillRepository { get; }
+        IConstantDictionaryRepository _constantDictionaryRepository { get; }
         void Commit();
     }
 }
