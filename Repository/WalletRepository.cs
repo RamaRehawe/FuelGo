@@ -16,6 +16,11 @@ namespace FuelGo.Repository
             _context.SaveChanges();
         }
 
+        public Wallet GetWalletByCustomerId(int customerId)
+        {
+            return _context.Wallets.Where(w => w.UserId == customerId).FirstOrDefault();
+        }
+
         public Wallet GetWalletByUserId(int userId)
         {
             return _context.Wallets.Where(w => w.UserId == userId).FirstOrDefault();
