@@ -10,5 +10,6 @@ namespace FuelGo.Inerfaces
         bool AddCenter(Center center);
         ICollection<Status> GetStatuses();
         void AddAdmin(Admin admin);
+        ICollection<Order> GetOrders();
     }
 }
