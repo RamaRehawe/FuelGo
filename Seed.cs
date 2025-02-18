@@ -553,24 +553,24 @@ namespace FuelGo
                 var constants = new List<ConstantDictionary>
                 {
                     // Charge 0.5 (currency units) per Kelo meter delivered.
-                    new ConstantDictionary { Key = "DeliveryChargePerKeloMeter", Value = 1000.0 },
+                    new ConstantDictionary { Key = "رسوم التوصيل لكل كيلومتر", Value = 1000.0 },
 
                     // The minimum delivery fee is 2.0 (currency units).
-                    new ConstantDictionary { Key = "MinimumDeliveryCharge", Value = 5000.0 },
+                    new ConstantDictionary { Key = "الحد الأدنى لرسوم التوصيل", Value = 5000.0 },
 
                     // The maximum delivery fee is capped at 20.0 (currency units).
-                    new ConstantDictionary { Key = "MaximumDeliveryCharge", Value = 20000.0 },
+                    new ConstantDictionary { Key = "الحد الأقصى لرسوم التوصيل", Value = 20000.0 },
 
                     // (Optional) A fuel surcharge rate, e.g., 10% added on top of the calculated fee.
-                    new ConstantDictionary { Key = "FuelSurchargePercentage", Value = 10.0 },
+                    new ConstantDictionary { Key = "نسبة الرسوم الإضافية على الوقود", Value = 10.0 },
 
                     // (Optional) Other constants. For example, you might want a conversion factor for distances.
-                    new ConstantDictionary { Key = "DistanceConversionFactor", Value = 1.0 },
+                    new ConstantDictionary { Key = "عامل تحويل المسافات", Value = 1.0 },
 
                     // Free delivery threshold (in liters). If the customer orders 50 liters or more, delivery is free.
-                    new ConstantDictionary { Key = "FreeDeliveryThreshold", Value = 50.0 }
-                };
+                    new ConstantDictionary { Key = "حد التوصيل المجاني", Value = 30.0 }
 
+                };
                 dataContext.ConstantDictionaries.AddRange(constants);
                 dataContext.SaveChanges();
             }

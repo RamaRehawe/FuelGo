@@ -47,6 +47,7 @@ namespace FuelGo.Helper
                 .ForMember(dest => dest.CargoTankTypeName, opt => opt.MapFrom(src => src.FuelType.Name));
             CreateMap<Shift, ResShiftsDto>().ReverseMap();
             CreateMap<WalletTransaction, ReqChargeWalletDto>().ReverseMap();
+            CreateMap<ConstantDictionary, ReqConstantValueDto>().ReverseMap();
         }
     }
 }
