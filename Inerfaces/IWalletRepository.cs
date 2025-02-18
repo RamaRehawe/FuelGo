@@ -6,5 +6,6 @@ namespace FuelGo.Inerfaces
     {
         Wallet GetWalletByUserId(int userId);
         void AddWallet(Wallet wallet);
+        Wallet GetWalletByCustomerId(int customerId);
     }
 }
