@@ -46,7 +46,7 @@ namespace FuelGo.Repository
 
         public FuelDetail GetFuelByCenterAndFuelId(int centerId, int fuelTypeId)
         {
-            return _context.FuelDetails.Where(fd => fd.FuelTypeId == fuelTypeId && fd.CenterId == centerId).FirstOrDefault();
+            return _context.FuelDetails.Where(fd => fd.CenterId == centerId && fd.FuelTypeId == fuelTypeId).FirstOrDefault();
         }
 
         public ICollection<Shift> GetShifts()
