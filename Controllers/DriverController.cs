@@ -152,7 +152,7 @@ namespace FuelGo.Controllers
             order.FinalPrice = (fuelPrice * quantity) +
                 CalculateDeliveryPrice(order.CustomerLat, order.CustomerLong, order.DriverLat, order.DriverLong, 
                 quantity);
-            var freeDelivery = GetConstantValue("FreeDeliveryThreshold");
+            var freeDelivery = GetConstantValue("حد التوصيل المجاني");
             if (order.OrderedQuantity >= freeDelivery && quantity < freeDelivery)
             {
                 order.FinalPrice += 10000;

@@ -48,7 +48,7 @@ namespace FuelGo.Controllers
             double orderedLiters)
         {
             // Retrieve the free delivery threshold (in liters)
-            double freeDeliveryThreshold = GetConstantValue("FreeDeliveryThreshold");
+            double freeDeliveryThreshold = GetConstantValue("حد التوصيل المجاني");
             // If the customer orders at least the threshold, no delivery fee is charged.
             if (orderedLiters >= freeDeliveryThreshold)
             {
@@ -58,14 +58,14 @@ namespace FuelGo.Controllers
             double distanceInKeloMeters = HaversineDistance(customerLat, customerLong, driverLat, driverLong);
 
             // adjust the distance if needed (e.g., unit conversion)
-            double distanceConversionFactor = GetConstantValue("DistanceConversionFactor");
+            double distanceConversionFactor = GetConstantValue("عامل تحويل المسافات");
             double effectiveDistance = distanceInKeloMeters * distanceConversionFactor;
 
             // Retrieve constant values
-            double chargePerMeter = GetConstantValue("DeliveryChargePerKeloMeter");
-            double minCharge = GetConstantValue("MinimumDeliveryCharge");
-            double maxCharge = GetConstantValue("MaximumDeliveryCharge");
-            double fuelSurchargePercentage = GetConstantValue("FuelSurchargePercentage");
+            double chargePerMeter = GetConstantValue("رسوم التوصيل لكل كيلومتر");
+            double minCharge = GetConstantValue("الحد الأدنى لرسوم التوصيل");
+            double maxCharge = GetConstantValue("الحد الأقصى لرسوم التوصيل");
+            double fuelSurchargePercentage = GetConstantValue("نسبة الرسوم الإضافية على الوقود");
 
             // Calculate the base price
             double basePrice = distanceInKeloMeters * chargePerMeter;
