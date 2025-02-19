@@ -99,13 +99,19 @@ namespace FuelGo.Controllers
         [HttpPost("edit-fuel-price")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(200)]
-        public IActionResult EditFuelPrice(ReqEditFuelPriceDto prices)
+        public IActionResult EditFuelPrice(List<ReqEditFuelPriceDto> prices)
         {
-            if (prices == null)
-                return BadRequest(ModelState);
+            if (prices == null || prices.Count == 0)
+                return BadRequest("No prices provided.");
             var admin = _unitOfWork._adminRepository.GetAdminByUserId(base.GetActiveUser()!.Id);
-            var fuel = _unitOfWork._adminRepository.GetFuelByCenterAndFuelId(admin.CenterId, prices.FuelTypeId);
-            fuel.Price = prices.Price;
+            foreach (var priceDto in prices)
+            {
+                var fuel = _unitOfWork._adminRepository.GetFuelByCenterAndFuelId(admin.CenterId, priceDto.FuelTypeId);
+                if (fuel != null)
+                {
+                    fuel.Price = priceDto.Price;
+                }
+            }
             _unitOfWork.Commit();
             return Ok("edited succesfully");
         }
