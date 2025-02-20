@@ -1,6 +1,7 @@
 using FuelGo;
 using FuelGo.Controllers;
 using FuelGo.Data;
+using FuelGo.Hubs;
 using FuelGo.Inerfaces;
 using FuelGo.Repository;
 using FuelGo.Services;
@@ -41,7 +42,8 @@ builder.Services.AddControllers();
 builder.Services.AddTransient<Seed>();
 builder.Services.AddControllers().AddJsonOptions(x =>
                  x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddSignalR();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IBaseRepository, BaseRepository>();
@@ -97,11 +99,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseRouting();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<TrackingHub>("/trackingHub");
 
 app.Run();
