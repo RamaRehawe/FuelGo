@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using FuelGo.Dto;
+using FuelGo.Hubs;
 using FuelGo.Inerfaces;
 using FuelGo.Models;
 using FuelGo.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace FuelGo.Controllers
 {
@@ -181,6 +183,33 @@ namespace FuelGo.Controllers
             var driver = _unitOfWork._orderRepository.GetDriver(base.GetActiveUser()!.Id);
             var truck = _unitOfWork._orderRepository.GetTruck(driver.TruckId);
             return Ok(truck.CargoTankCapacity);
+        }
+
+        [HttpPost("update-driver-location")]
+        [Authorize(Roles = "Driver")]
+        public async Task<IActionResult> UpdateDriverLocation(UpdateDriverLocationDto model, 
+            [FromServices] IHubContext<TrackingHub> hubContext)
+        {
+            var driver = _unitOfWork._orderRepository.GetDriver(base.GetActiveUser()!.Id);
+            var order = _unitOfWork._driverRepository.GetActiveOrderByDriverId(driver.Id);
+            if (order == null)
+                return BadRequest("No active order found for this driver");
+            order.DriverLat = model.Latitude;
+            order.DriverLong = model.Longitude;
+            if (driver.TruckId != null)
+            {
+                var truck = _unitOfWork._orderRepository.GetTruck(driver.TruckId);
+                if (truck != null)
+                {
+                    truck.Lat = model.Latitude;
+                    truck.Long = model.Longitude;
+                }
+            }
+            _unitOfWork.Commit();
+            // Broadcast the location update using SignalR (using the unique OrderNumber).
+            await hubContext.Clients.Group($"order-{order.OrderNumber}")
+                .SendAsync("ReceiveLocation", model.Latitude, model.Longitude);
+            return Ok("Driver and truck location updated successfully");
         }
     }
 }
