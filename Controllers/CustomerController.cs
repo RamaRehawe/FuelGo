@@ -27,14 +27,13 @@ namespace FuelGo.Controllers
         public IActionResult RegisterCustomer(ReqRegisterCustomerDto register)
         {
             if (register == null)
-                return BadRequest(ModelState);
+                return BadRequest("Registration data is required.");
 
-            var customer = _unitOfWork._customerRepository.GetUsers()
-                .Where(c => c.Phone == register.Phone).FirstOrDefault();
-            if(customer != null)
+            var existingCustomer = _unitOfWork._customerRepository.GetUsers()
+                                  .FirstOrDefault(c => c.Phone == register.Phone);
+            if (existingCustomer != null)
             {
-                ModelState.AddModelError("", "User already exists");
-                return StatusCode(422, ModelState);
+                return Conflict("User already exists");
             }
             var customerMap = _mapper.Map<User>(register);
             customerMap.CreatedAt = DateTime.Now;
@@ -45,7 +44,7 @@ namespace FuelGo.Controllers
                 return StatusCode(500, ModelState);
             }
             var resCustomer = _mapper.Map<ResRegisterCustomerDto>(customerMap);
-            return Ok("Successfully added");
+            return Created("Register", resCustomer);
         }
 
         [HttpGet("get-my-properties")]
