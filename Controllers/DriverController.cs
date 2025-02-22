@@ -28,7 +28,8 @@ namespace FuelGo.Controllers
             var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "قيد الانتظار").FirstOrDefault().Id;
             var truck = _unitOfWork._orderRepository.GetTruck(
                 _unitOfWork._orderRepository.GetDriver(base.GetActiveUser()!.Id).TruckId);
-            var orders = _unitOfWork._driverRepository.GetPendingOrders(statusId).Where(o => o.FuelTypeId == truck.CargoTankTypeId);
+            var orders = _unitOfWork._driverRepository.GetPendingOrders(statusId)
+                .Where(o => o.FuelTypeId == truck.CargoTankTypeId && o.OrderedQuantity <= truck.CargoTankCapacity);
             var resOrders = _mapper.Map<List<ResPendingOrdersDto>>(orders);
             return Ok(resOrders);
         }
