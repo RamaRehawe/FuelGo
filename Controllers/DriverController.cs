@@ -147,9 +147,12 @@ namespace FuelGo.Controllers
         {
             var userId = base.GetActiveUser()!.Id;
             var driver = _unitOfWork._orderRepository.GetDriver(userId);
+            var truck = _unitOfWork._orderRepository.GetTruck(
+                _unitOfWork._orderRepository.GetDriver(base.GetActiveUser()!.Id).TruckId);
             var order = _unitOfWork._driverRepository.GetActiveOrderByDriverId(driver.Id);
             var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "تم التسليم").FirstOrDefault().Id;
             order.FinalQuantity = quantity;
+            truck.CargoTankCapacity -= quantity;
             order.StatusId = statusId;
             var fuelPrice = _unitOfWork._orderRepository.GetFuelPrice(order.FuelTypeId);
             order.FinalPrice = (fuelPrice * quantity) +
