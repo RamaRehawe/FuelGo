@@ -13,6 +13,7 @@
         IWalletRepository _walletRepository { get; }
         ITankRefillRepository _tankRefillRepository { get; }
         IConstantDictionaryRepository _constantDictionaryRepository { get; }
+        ICityRepository _cityRepository { get; }
         void Commit();
     }
 }
