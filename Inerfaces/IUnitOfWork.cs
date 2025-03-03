@@ -14,6 +14,7 @@
         ITankRefillRepository _tankRefillRepository { get; }
         IConstantDictionaryRepository _constantDictionaryRepository { get; }
         ICityRepository _cityRepository { get; }
+        INeighborhoodRepository _neighborhoodRepository { get; }
         void Commit();
     }
 }
