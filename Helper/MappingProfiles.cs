@@ -50,6 +50,7 @@ namespace FuelGo.Helper
             CreateMap<Shift, ResShiftsDto>().ReverseMap();
             CreateMap<WalletTransaction, ReqChargeWalletDto>().ReverseMap();
             CreateMap<ConstantDictionary, ReqConstantValueDto>().ReverseMap();
+            CreateMap<City, ResCityDto>().ReverseMap();
         }
     }
 }
