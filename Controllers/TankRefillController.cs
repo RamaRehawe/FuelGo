@@ -18,7 +18,7 @@ namespace FuelGo.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost("Refill")]
+        [HttpPost("refill")]
         [Authorize(Roles = "Driver")]
         public IActionResult RefillTank(ReqRefillDto refillData)
         {
@@ -37,6 +37,46 @@ namespace FuelGo.Controllers
                 return StatusCode(500, ModelState);
             }
             return Ok("tank refilled");
+        }
+
+        [HttpPost("refill-cargo-tank")]
+        [Authorize(Roles = "Driver")]
+        public IActionResult RefillCargoTank(ReqRefillCargoDto refillData)
+        {
+            if (refillData == null)
+                return BadRequest(ModelState);
+            var refillMap = _mapper.Map<TruckTankRefill>(refillData);
+            var driver = _unitOfWork._orderRepository.GetDriver(base.GetActiveUser()!.Id);
+            refillMap.DriverId = driver.Id;
+            refillMap.TruckId = (int)driver.TruckId;
+            var truck = _unitOfWork._orderRepository.GetTruck(driver.TruckId);
+            truck.CargoTankCapacity += refillMap.QuantityCargoRefill;
+            if (!_unitOfWork._tankRefillRepository.Refill(refillMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Cargo tank refilled");
+        }
+
+        [HttpPost("refill-fuel-tank")]
+        [Authorize(Roles = "Driver")]
+        public IActionResult RefillFuelTank(ReqRefillFuelDto refillData)
+        {
+            if (refillData == null)
+                return BadRequest(ModelState);
+            var refillMap = _mapper.Map<TruckTankRefill>(refillData);
+            var driver = _unitOfWork._orderRepository.GetDriver(base.GetActiveUser()!.Id);
+            refillMap.DriverId = driver.Id;
+            refillMap.TruckId = (int)driver.TruckId;
+            var truck = _unitOfWork._orderRepository.GetTruck(driver.TruckId);
+            truck.FuelTankCapacity += refillMap.QuantityFuelRefill;
+            if (!_unitOfWork._tankRefillRepository.Refill(refillMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Fuel tank refilled");
         }
     }
 }
