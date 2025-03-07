@@ -26,13 +26,18 @@ namespace FuelGo.Repository
 
         public Customer GetPropretiesByUser(int userId)
         {
-            return _context.Customers.AsNoTracking()
+            var customers = _context.Customers
                 .Where(c => c.UserId == userId).
                 Include(c => c.CustomerCars).
                 Include(c => c.CustomerApartments)
                     .ThenInclude(ca => ca.Neighborhood)
                         .ThenInclude(n => n.City)
                 .FirstOrDefault()!;
+            customers.CustomerApartments = customers.CustomerApartments
+                .Where(ca => ca.IsDeleted != true).ToList();
+            customers.CustomerCars = customers.CustomerCars
+                .Where(cc => cc.IsDeleted != true).ToList();
+            return customers;
         }
 
         public ICollection<User> GetUsers()
