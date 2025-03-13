@@ -53,6 +53,7 @@ namespace FuelGo.Helper
             CreateMap<ConstantDictionary, ReqConstantValueDto>().ReverseMap();
             CreateMap<City, ResCityDto>().ReverseMap();
             CreateMap<Neighborhood, ResNeighborhoodDto>().ReverseMap();
+            CreateMap<Center, ResCentersDto>().ReverseMap();
         }
     }
 }

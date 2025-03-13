@@ -93,5 +93,21 @@ namespace FuelGo.Controllers
             var resOrders = _mapper.Map<List<ResOrderDto>>(orders);
             return Ok(resOrders);
         }
+
+        [HttpGet("get-centers")]
+        [ProducesResponseType(200)]
+        [Authorize(Roles = "SystemAdmin")]
+        public IActionResult GetCenters()
+        {
+            var centers = _unitOfWork._systemAdminRepository.GetCenters();
+            var resCenters = _mapper.Map<List<ResCentersDto>>(centers);
+            foreach (var center in resCenters)
+            {
+                var neighborhoodId = _unitOfWork._systemAdminRepository.GetNeighborhoodIdByCenterId(center.Id);
+                var neighborhoodName = _unitOfWork._orderRepository.GetNeighborhoodName(neighborhoodId);
+                center.NeighborhoodName = neighborhoodName;
+            }
+            return Ok(resCenters);
+        }
     }
 }

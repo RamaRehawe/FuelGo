@@ -39,6 +39,12 @@ namespace FuelGo.Repository
             return _context.Centers.OrderBy(c => c.Id).ToList();
         }
 
+        public int GetNeighborhoodIdByCenterId(int centerId)
+        {
+            var center = _context.Centers.Where(c => c.Id == centerId).FirstOrDefault();
+            return center.NeighborhoodId;
+        }
+
         public ICollection<Order> GetOrders()
         {
             return _context.Orders
