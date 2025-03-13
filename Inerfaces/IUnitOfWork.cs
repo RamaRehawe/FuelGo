@@ -15,6 +15,7 @@
         IConstantDictionaryRepository _constantDictionaryRepository { get; }
         ICityRepository _cityRepository { get; }
         INeighborhoodRepository _neighborhoodRepository { get; }
+        IFuelDetailsRepository _fuelDetailsRepository { get; }
         void Commit();
     }
 }

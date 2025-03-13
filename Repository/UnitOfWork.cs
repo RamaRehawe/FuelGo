@@ -19,13 +19,15 @@ namespace FuelGo.Repository
         public IConstantDictionaryRepository _constantDictionaryRepository { get; private set; }
         public ICityRepository _cityRepository { get; private set; }
         public INeighborhoodRepository _neighborhoodRepository { get; private set; }
+        public IFuelDetailsRepository _fuelDetailsRepository { get; private set; }
         public UnitOfWork(DataContext context, IAdminRepository adminRepository, 
             ICustomerRepository customerRepository, IOrderRepository orderRepository, 
             ISystemAdminRepository systemAdminRepository, IUserRepository userRepository, 
             IDriverRepository driverRepository, ICustomerCarRepository customerCarRepository,
             ICustomerApartmentRepository customerApartmentRepository, IWalletRepository walletRepository,
             ITankRefillRepository tankRefillRepository, IConstantDictionaryRepository constantDictionaryRepository,
-            ICityRepository cityRepository, INeighborhoodRepository neighborhoodRepository)
+            ICityRepository cityRepository, INeighborhoodRepository neighborhoodRepository,
+            IFuelDetailsRepository fuelDetailsRepository)
         {
             _context = context;
             _adminRepository = adminRepository;
@@ -41,6 +43,7 @@ namespace FuelGo.Repository
             _constantDictionaryRepository = constantDictionaryRepository;
             _cityRepository = cityRepository;
             _neighborhoodRepository = neighborhoodRepository;
+            _fuelDetailsRepository = fuelDetailsRepository;
         }
 
         public void Commit()

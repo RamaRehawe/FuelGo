@@ -3,6 +3,7 @@ using FuelGo.Controllers;
 using FuelGo.Data;
 using FuelGo.Hubs;
 using FuelGo.Inerfaces;
+using FuelGo.Models;
 using FuelGo.Repository;
 using FuelGo.Services;
 using FuelGo.Swagger;
@@ -59,6 +60,7 @@ builder.Services.AddScoped<ITankRefillRepository, TankRefillRepository>();
 builder.Services.AddScoped<IConstantDictionaryRepository, ConstantDictionaryRepository>();
 builder.Services.AddScoped<ICityRepository, CityRepository>();
 builder.Services.AddScoped<INeighborhoodRepository, NeighborhoodRepository>();
+builder.Services.AddScoped<IFuelDetailsRepository, FuelDetailsRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

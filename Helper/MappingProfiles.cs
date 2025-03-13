@@ -99,6 +99,15 @@ namespace FuelGo.Helper
             CreateMap<ResAdminDto, Admin>()
                 .ForMember(dest => dest.User, opt => opt.Ignore()) // Prevent overwriting User object
                 .ForMember(dest => dest.Status, opt => opt.Ignore()); // Prevent overwriting Status object
+
+            CreateMap<FuelDetail, ResFuelDetailsDto>()
+                .ForMember(dest => dest.FuelTypeName, opt => opt.MapFrom(src => src.FuelType.Name))
+                .ForMember(dest => dest.CenterName, opt => opt.MapFrom(src => src.Center.Name));
+
+            CreateMap<ResFuelDetailsDto, FuelDetail>()
+                .ForMember(dest => dest.FuelType, opt => opt.Ignore()) // Prevent accidental overwrites
+                .ForMember(dest => dest.Center, opt => opt.Ignore());
+
         }
     }
 }
