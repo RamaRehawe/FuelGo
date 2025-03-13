@@ -2,6 +2,7 @@
 {
     public class ResAddApartmentDto
     {
+        public int Id { get; set; }
         public string NeighborhoodName { get; set; }
         public string CityName { get; set; }
         public string Name { get; set; }
