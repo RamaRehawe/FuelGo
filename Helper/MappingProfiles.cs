@@ -25,6 +25,7 @@ namespace FuelGo.Helper
             CreateMap<Order, ReqAcceptOrderDto>().ReverseMap();
             CreateMap<Order, ResPendingOrdersDto>().ReverseMap();
             CreateMap<CustomerCar, AddCarDto>().ReverseMap();
+            CreateMap<CustomerCar, ResGetCarDto>().ReverseMap();
             CreateMap<CustomerApartment, ReqAddApartmentDto>().ReverseMap();
             CreateMap<CustomerApartment, ResAddApartmentDto>()
                 .ForMember(dest => dest.NeighborhoodName, opt => opt.MapFrom(src => src.Neighborhood.Name))
