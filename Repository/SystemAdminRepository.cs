@@ -34,6 +34,14 @@ namespace FuelGo.Repository
             return _context.Admins.Where(a => a.UserId == id).FirstOrDefault();
         }
 
+        public ICollection<Admin> GetAdminsByCenterId(int centerId)
+        {
+            return _context.Admins.Where(a => a.CenterId == centerId)
+                .Include(a => a.User)
+                .Include(a => a.Status)
+                .ToList();
+        }
+
         public ICollection<Center> GetCenters()
         {
             return _context.Centers.OrderBy(c => c.Id).ToList();

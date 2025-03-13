@@ -109,5 +109,15 @@ namespace FuelGo.Controllers
             }
             return Ok(resCenters);
         }
+
+        [HttpGet("get-admins-by-cneter")]
+        [ProducesResponseType(200)]
+        [Authorize(Roles = "SystemAdmin")]
+        public IActionResult GetAdminsByCenter(int centerId)
+        {
+            var admins = _unitOfWork._systemAdminRepository.GetAdminsByCenterId(centerId);
+            var resAdmins = _mapper.Map<List<ResAdminDto>>(admins);
+            return Ok(resAdmins);
+        }
     }
 }

@@ -12,5 +12,6 @@ namespace FuelGo.Inerfaces
         void AddAdmin(Admin admin);
         ICollection<Order> GetOrders();
         int GetNeighborhoodIdByCenterId(int centerId);
+        ICollection<Admin> GetAdminsByCenterId(int centerId);
     }
 }
