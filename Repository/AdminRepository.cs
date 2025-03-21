@@ -36,7 +36,7 @@ namespace FuelGo.Repository
 
         public Center GetCenterByAdminId(int adminId)
         {
-            var admin = _context.Admins.Where(a => a.UserId == adminId).FirstOrDefault();
+            var admin = _context.Admins.Where(a => a.Id == adminId).FirstOrDefault();
             return _context.Centers.Where(c => c.Id == admin.CenterId).FirstOrDefault();
         }
 
