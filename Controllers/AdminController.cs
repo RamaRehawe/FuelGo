@@ -164,6 +164,6 @@ namespace FuelGo.Controllers
             var resShifts = _mapper.Map<List<ResShiftsDto>>(shifts);
             return Ok(resShifts);
         }
-
+        
     }
 }
