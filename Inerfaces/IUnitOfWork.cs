@@ -16,6 +16,7 @@
         ICityRepository _cityRepository { get; }
         INeighborhoodRepository _neighborhoodRepository { get; }
         IFuelDetailsRepository _fuelDetailsRepository { get; }
+        IGasStationRepository _gasStationRepository { get; }
         void Commit();
     }
 }

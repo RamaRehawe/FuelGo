@@ -62,6 +62,7 @@ builder.Services.AddScoped<IConstantDictionaryRepository, ConstantDictionaryRepo
 builder.Services.AddScoped<ICityRepository, CityRepository>();
 builder.Services.AddScoped<INeighborhoodRepository, NeighborhoodRepository>();
 builder.Services.AddScoped<IFuelDetailsRepository, FuelDetailsRepository>();
+builder.Services.AddScoped<IGasStationRepository, GasStationRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
