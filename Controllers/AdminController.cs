@@ -165,7 +165,7 @@ namespace FuelGo.Controllers
             return Ok(resShifts);
         }
         [HttpGet]
-        public IActionResult HealthCheack()
+        public IActionResult HealthCheck()
         {
             return Ok("I am alive");
         }
