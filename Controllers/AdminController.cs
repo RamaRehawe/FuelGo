@@ -164,6 +164,10 @@ namespace FuelGo.Controllers
             var resShifts = _mapper.Map<List<ResShiftsDto>>(shifts);
             return Ok(resShifts);
         }
-
+        [HttpGet]
+        public IActionResult HealthCheack()
+        {
+            return Ok("I am alive");
+        }
     }
 }
