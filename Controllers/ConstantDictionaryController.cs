@@ -18,14 +18,14 @@ namespace FuelGo.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost("edit-contant-value")]
+        [HttpPost("edit-constant-value")]
         [Authorize(Roles = "SystemAdmin")]
         [ProducesResponseType(200)]
         public IActionResult EditConstantValues(List<ReqConstantValueDto> values)
         {
             foreach (var valueDto in values)
             {
-                var constant = _unitOfWork._constantDictionaryRepository.GetConstantdictionary(valueDto.Key);
+                var constant = _unitOfWork._constantDictionaryRepository.GetConstantDictionary(valueDto.Key);
                 if (constant != null)
                 {
                     constant.Value = valueDto.Value;
@@ -33,7 +33,14 @@ namespace FuelGo.Controllers
             }
             _unitOfWork.Commit();
             return Ok("Constants updated successfully.");
-            
+        }
+
+        [HttpGet("get-constant-values")]
+        [ProducesResponseType(200)]
+        public IActionResult GetContatntValues()
+        {
+            var values = _unitOfWork._constantDictionaryRepository.GetConstantDictionaries();
+            return Ok(values);
         }
     }
 }
