@@ -10,7 +10,12 @@ namespace FuelGo.Repository
         {
         }
 
-        public ConstantDictionary GetConstantdictionary(string key)
+        public ICollection<ConstantDictionary> GetConstantDictionaries()
+        {
+            return _context.ConstantDictionaries.OrderBy(cd => cd.Id).ToList();
+        }
+
+        public ConstantDictionary GetConstantDictionary(string key)
         {
             return _context.ConstantDictionaries.Where(cd => cd.Key == key).FirstOrDefault();
         }

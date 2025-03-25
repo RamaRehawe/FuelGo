@@ -4,6 +4,7 @@ namespace FuelGo.Inerfaces
 {
     public interface IConstantDictionaryRepository : IBaseRepository
     {
-        ConstantDictionary GetConstantdictionary(string key);
+        ConstantDictionary GetConstantDictionary(string key);
+        ICollection<ConstantDictionary> GetConstantDictionaries();
     }
 }
