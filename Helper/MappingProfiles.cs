@@ -114,6 +114,8 @@ namespace FuelGo.Helper
                 .ForMember(dest => dest.Center, opt => opt.Ignore());
 
             CreateMap<GasStation, ResGasStationsDto>().ReverseMap();
+
+            CreateMap<Status, ResStatusDto>().ReverseMap();
         }
     }
 }

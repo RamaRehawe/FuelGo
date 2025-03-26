@@ -231,7 +231,8 @@ namespace FuelGo.Controllers
         public IActionResult GetDriverStatus()
         {
             var status = _unitOfWork._driverRepository.GetDriverStatus(GetActiveUser()!.Id);
-            return Ok(status.Name);
+            var resStatus = _mapper.Map<ResStatusDto>(status);
+            return Ok(resStatus);
         }
     }
 }
