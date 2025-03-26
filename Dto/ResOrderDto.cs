@@ -14,5 +14,11 @@
         public string? CustomerCarBrand { get; set; }
         public string? CustomerApartmentName { get; set; }
         public string AuthCode { get; set; }
+        public string StatusName { get; set; }
+        public string CustomerName { get; set; }
+        public string CustomerPhone { get; set; }
+        public string? DriverName { get; set; }
+        public string? DriverPhone { get; set; }
+        public double? DeliveryFee { get; set; }
     }
 }

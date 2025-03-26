@@ -173,8 +173,18 @@ namespace FuelGo.Controllers
         public IActionResult GetMyOrders()
         {
             var driverId = _unitOfWork._orderRepository.GetDriverId(base.GetActiveUser()!.Id);
+            var driver = _unitOfWork._orderRepository.GetDriver(base.GetActiveUser()!.Id);
             var orders = _unitOfWork._driverRepository.GetOrders(driverId);
             var resOrders = _mapper.Map<List<ResOrderDto>>(orders);
+            foreach (var dto in resOrders)
+            {
+                var order = orders.FirstOrDefault(o => o.OrderNumber == dto.OrderNumber);
+                var fuel = _unitOfWork._adminRepository.GetFuelByCenterAndFuelId(driver.CenterId, order.FuelTypeId);
+                if (order.FinalQuantity.HasValue && fuel != null && order.FinalPrice.HasValue)
+                {
+                    dto.DeliveryFee = (order.FinalQuantity * fuel.Price) - order.FinalPrice;
+                }
+            }
             return Ok(resOrders);
         }
 

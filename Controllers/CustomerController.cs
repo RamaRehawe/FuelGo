@@ -70,6 +70,20 @@ namespace FuelGo.Controllers
             var customerId = _unitOfWork._orderRepository.GetCustomerId(base.GetActiveUser()!.Id);
             var orders = _unitOfWork._customerRepository.GetOrders(customerId);
             var resOrders = _mapper.Map<List<ResOrderDto>>(orders);
+            foreach (var dto in resOrders)
+            {
+                var order = orders.FirstOrDefault(o => o.OrderNumber == dto.OrderNumber);
+                if (order.FinalQuantity.HasValue && order.CustomerLat.HasValue && order.DriverLat.HasValue)
+                {
+                    dto.DeliveryFee = CalculateDeliveryPrice(order.CustomerLat, order.CustomerLong, order.DriverLat, order.DriverLong,
+                                    (double)order.FinalQuantity);
+                    var freeDelivery = GetConstantValue("حد التوصيل المجاني");
+                    if (order.OrderedQuantity >= freeDelivery && order.FinalQuantity < freeDelivery)
+                    {
+                        order.FinalPrice += 10000;
+                    }
+                }
+            }
             return Ok(resOrders);
         }
     }

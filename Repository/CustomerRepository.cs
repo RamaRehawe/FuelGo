@@ -13,14 +13,20 @@ namespace FuelGo.Repository
             _context = context;
         }
 
+        public Driver GetdriverById(int driverId)
+        {
+            return _context.Drivers.Where(d => d.Id == driverId).FirstOrDefault();
+        }
+
         public ICollection<Order> GetOrders(int customerId)
         {
             return _context.Orders.Where(o => o.CustomerId == customerId)
-                .Include(o => o.Neighborhood)
-                    .ThenInclude(n => n.City)
+                .Include(o => o.Neighborhood).ThenInclude(n => n.City)
                 .Include(o => o.FuelType)
                 .Include(o => o.CustomerCar)
                 .Include(o => o.CustomerApartment)
+                .Include(o => o.Driver).ThenInclude(d => d.User)
+                .Include(o => o.Status)
                 .ToList();
         }
 
