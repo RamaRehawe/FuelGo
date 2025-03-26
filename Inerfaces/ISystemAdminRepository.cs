@@ -10,6 +10,7 @@ namespace FuelGo.Inerfaces
         bool AddCenter(Center center);
         ICollection<Status> GetStatuses();
         void AddAdmin(Admin admin);
+        ICollection<Order> GetOrdersByStatus(int statusId);
         ICollection<Order> GetOrders();
         int GetNeighborhoodIdByCenterId(int centerId);
         ICollection<Admin> GetAdminsByCenterId(int centerId);

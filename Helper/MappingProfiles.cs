@@ -116,6 +116,8 @@ namespace FuelGo.Helper
             CreateMap<GasStation, ResGasStationsDto>().ReverseMap();
 
             CreateMap<Status, ResStatusDto>().ReverseMap();
+
+            CreateMap<Order, ReqGetOrdersDto>().ReverseMap();
         }
     }
 }
