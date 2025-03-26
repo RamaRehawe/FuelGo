@@ -9,6 +9,7 @@ namespace FuelGo.Inerfaces
         bool RegisterCustomer(User user);
         Customer GetPropretiesByUser(int userId);
         ICollection<Order> GetOrders(int customerId);
+        Driver GetdriverById(int driverId);
         bool Save();
     }
 }
