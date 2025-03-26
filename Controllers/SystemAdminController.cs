@@ -87,11 +87,21 @@ namespace FuelGo.Controllers
         [HttpGet("get-all-orders")]
         [ProducesResponseType(200)]
         [Authorize(Roles = "SystemAdmin")]
-        public IActionResult GetOrders()
+        public IActionResult GetOrders([FromQuery] int statusId)
         {
-            var orders = _unitOfWork._systemAdminRepository.GetOrders();
-            var resOrders = _mapper.Map<List<ResOrderDto>>(orders);
-            return Ok(resOrders);
+            
+            if(statusId == null)
+            {
+                var orders = _unitOfWork._systemAdminRepository.GetOrders();
+                var resOrders = _mapper.Map<List<ResOrderDto>>(orders);
+                return Ok(resOrders);
+            }
+            else
+            {
+                var orders = _unitOfWork._systemAdminRepository.GetOrdersByStatus(statusId);
+                var resOrders = _mapper.Map<List<ResOrderDto>>(orders);
+                return Ok(resOrders);
+            }
         }
 
         [HttpGet("get-centers")]
