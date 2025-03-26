@@ -33,7 +33,7 @@ namespace FuelGo.Controllers
             var newDriver = _unitOfWork._customerRepository.GetUsers().Where(d => d.Phone == driverData.Phone).FirstOrDefault();
             if(newDriver != null)
             {
-                ModelState.AddModelError("", "Driver allready exists");
+                ModelState.AddModelError("", "User allready exists");
                 return StatusCode(422, ModelState);
             }
             var driverMap = _mapper.Map<User>(driverData);

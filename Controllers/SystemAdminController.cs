@@ -32,7 +32,7 @@ namespace FuelGo.Controllers
             var newAdmin = _unitOfWork._customerRepository.GetUsers().Where(d => d.Phone == adminData.Phone).FirstOrDefault();
             if(newAdmin != null)
             {
-                ModelState.AddModelError("", "Admin allready exists");
+                ModelState.AddModelError("", "User allready exists");
                 return StatusCode(422, ModelState);
             }
             var adminMap = _mapper.Map<User>(adminData);
