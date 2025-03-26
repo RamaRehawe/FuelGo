@@ -8,5 +8,6 @@ namespace FuelGo.Inerfaces
         Order GetActiveOrderByDriverId(int driverId);
         void UpdateOrder(Order order);
         ICollection<Order> GetOrders(int driverId);
+        Status GetDriverStatus(int userId);
     }
 }
