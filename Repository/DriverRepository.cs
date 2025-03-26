@@ -16,6 +16,12 @@ namespace FuelGo.Repository
             return _context.Orders.Where(o => o.DriverId == driverId && o.IsActive == true).FirstOrDefault();
         }
 
+        public Status GetDriverStatus(int userId)
+        {
+            var driver = _context.Drivers.Where(d => d.UserId == userId).FirstOrDefault();
+            return _context.Statuses.Where(s => s.Id == driver.StatusId).FirstOrDefault();
+        }
+
         public ICollection<Order> GetOrders(int driverId)
         {
             return _context.Orders.Where(o => o.DriverId == driverId)

@@ -214,5 +214,14 @@ namespace FuelGo.Controllers
                 .SendAsync("ReceiveLocation", model.Latitude, model.Longitude);
             return Ok("Driver and truck location updated successfully");
         }
+
+        [HttpGet("get-driver-status")]
+        [Authorize(Roles = "Driver")]
+        [ProducesResponseType(200)]
+        public IActionResult GetDriverStatus()
+        {
+            var status = _unitOfWork._driverRepository.GetDriverStatus(GetActiveUser()!.Id);
+            return Ok(status.Name);
+        }
     }
 }
