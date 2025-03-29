@@ -21,6 +21,11 @@ namespace FuelGo.Repository
             return _context.Orders.Where(o => o.IsActive == true && o.CustomerId == customerId).FirstOrDefault();
         }
 
+        public Order GetActiveOrderByDriverId(int driverId)
+        {
+            return _context.Orders.Where(o => o.IsActive == true && o.DriverId == driverId).FirstOrDefault();
+        }
+
         public CustomerApartment GetApartmentById(int? id)
         {
             return _context.CustomerApartments.Where(ca => ca.Id == id).FirstOrDefault();

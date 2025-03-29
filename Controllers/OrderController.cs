@@ -134,6 +134,20 @@ namespace FuelGo.Controllers
             });
         }
 
-        
+        [HttpGet("get-active-order-status")]
+        [ProducesResponseType(200)]
+        public IActionResult GetActiveOrderStatus()
+        {
+            var userId = base.GetActiveUser()!.Id;
+            var driver = _unitOfWork._orderRepository.GetDriver(userId);
+            var order = _unitOfWork._orderRepository.GetActiveOrderByDriverId(driver.Id);
+            if (order == null)
+                return NotFound("No active order found.");
+            var status = _unitOfWork._orderRepository.GetStatuses()
+                  .FirstOrDefault(o => o.Id == order.StatusId);
+            var resStatus = _mapper.Map<ResStatusDto>(status);
+            return Ok(resStatus);
+        }
+
     }
 }
