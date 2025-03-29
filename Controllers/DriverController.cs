@@ -43,7 +43,7 @@ namespace FuelGo.Controllers
         {
             var userId = base.GetActiveUser()!.Id;
             var driver = _unitOfWork._orderRepository.GetDriver(userId);
-            var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "متاح").FirstOrDefault().Id;
+            var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "انتظار").FirstOrDefault().Id;
             driver.StatusId = statusId;
             driver.IsDriving = true;
             _unitOfWork.Commit();
@@ -56,7 +56,7 @@ namespace FuelGo.Controllers
         {
             var userId = base.GetActiveUser()!.Id;
             var driver = _unitOfWork._orderRepository.GetDriver(userId);
-            var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "غير متصل").FirstOrDefault().Id;
+            var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "غير نشط").FirstOrDefault().Id;
             driver.StatusId = statusId;
             driver.IsDriving = false;
             _unitOfWork.Commit();
@@ -74,7 +74,7 @@ namespace FuelGo.Controllers
             if (order == null)
                 return NotFound("Order not found.");
             var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "في الطريق").FirstOrDefault().Id;
-            
+            var driverStatusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "مشغول").FirstOrDefault().Id;
             var driverId = _unitOfWork._orderRepository.GetDriverId(base.GetActiveUser()!.Id);
             var driver = _unitOfWork._orderRepository.GetDriver(base.GetActiveUser()!.Id);
             var truck = _unitOfWork._orderRepository.GetTruck(driver.TruckId);
@@ -82,6 +82,7 @@ namespace FuelGo.Controllers
             order.Price = (fuelPrice * order.OrderedQuantity) +
                 CalculateDeliveryPrice(order.CustomerLat, order.CustomerLong, truck.Lat, truck.Long,
                 order.OrderedQuantity);
+            driver.StatusId = driverStatusId;
             order.StatusId = statusId;
             order.DriverId = driverId;
             order.DriverLat = truck.Lat;
@@ -151,6 +152,8 @@ namespace FuelGo.Controllers
             var driver = _unitOfWork._orderRepository.GetDriver(userId);
             var order = _unitOfWork._driverRepository.GetActiveOrderByDriverId(driver.Id);
             var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "تم التسليم").FirstOrDefault().Id;
+            var driverStatusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "انتظار").FirstOrDefault().Id;
+            driver.StatusId = driverStatusId;
             order.FinalQuantity = quantity;
             order.StatusId = statusId;
             var fuelPrice = _unitOfWork._orderRepository.GetFuelPrice(order.FuelTypeId);
