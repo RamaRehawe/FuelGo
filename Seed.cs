@@ -235,9 +235,9 @@ namespace FuelGo
                     new Status { Name = "محظور", StatusTypeId = adminType.Id }, // Banned
 
                     // Driver Statuses
-                    new Status { Name = "متاح", StatusTypeId = driverType.Id }, // Available
+                    new Status { Name = "غير نشط", StatusTypeId = driverType.Id }, // Available
                     new Status { Name = "مشغول", StatusTypeId = driverType.Id }, // Busy
-                    new Status { Name = "غير متصل", StatusTypeId = driverType.Id }, // Offline
+                    new Status { Name = "انتظار", StatusTypeId = driverType.Id }, // Offline
                     new Status { Name = "في اجازة", StatusTypeId = driverType.Id } // On Leave
                 };
 
