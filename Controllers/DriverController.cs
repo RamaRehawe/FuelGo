@@ -166,8 +166,13 @@ namespace FuelGo.Controllers
                 order.FinalPrice += 10000;
             }
             _unitOfWork._driverRepository.UpdateOrder(order);
-            
-            return Ok("Order Completeed");
+            var resOrder = _mapper.Map<ResOrderDto>(order);
+            var fuel = _unitOfWork._adminRepository.GetFuelByCenterAndFuelId(driver.CenterId, order.FuelTypeId);
+            if (order.FinalQuantity.HasValue && fuel != null && order.FinalPrice.HasValue)
+            {
+                resOrder.DeliveryFee = (order.FinalQuantity * fuel.Price) - order.FinalPrice;
+            }
+            return Ok(resOrder);
         }
 
         [HttpGet("get-my-orders")]

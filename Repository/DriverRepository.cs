@@ -13,7 +13,11 @@ namespace FuelGo.Repository
 
         public Order GetActiveOrderByDriverId(int driverId)
         {
-            return _context.Orders.Where(o => o.DriverId == driverId && o.IsActive == true).FirstOrDefault();
+            return _context.Orders.Where(o => o.DriverId == driverId && o.IsActive == true)
+                .Include(o => o.CustomerApartment).ThenInclude(ca => ca.Customer)
+                .Include(o => o.CustomerCar).ThenInclude(cc => cc.Customer)
+                .Include(o => o.Customer).ThenInclude(c => c.User)
+                .FirstOrDefault();
         }
 
         public Status GetDriverStatus(int userId)
@@ -38,7 +42,10 @@ namespace FuelGo.Repository
 
         public ICollection<Order> GetPendingOrders(int statusId)
         {
-            return _context.Orders.Where(o => o.StatusId == statusId).ToList();
+            return _context.Orders.Where(o => o.StatusId == statusId)
+                .Include(o => o.CustomerApartment)
+                .Include(o => o.CustomerCar)
+                .ToList();
         }
 
         public void UpdateOrder(Order order)

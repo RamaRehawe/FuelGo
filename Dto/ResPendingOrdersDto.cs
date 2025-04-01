@@ -11,5 +11,6 @@
         public int FuelTypeId { get; set; }
         public double OrderedQuantity { get; set; }
         public int? CustomerCarId { get; set; }
+        public int? CustomerAppartmentId { get; set; }
     }
 }

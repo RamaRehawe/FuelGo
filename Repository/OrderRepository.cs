@@ -1,6 +1,7 @@
 ﻿using FuelGo.Data;
 using FuelGo.Inerfaces;
 using FuelGo.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FuelGo.Repository
 {
@@ -79,7 +80,11 @@ namespace FuelGo.Repository
 
         public Order GetOrder(string orderNumber)
         {
-            return _context.Orders.Where(o => o.OrderNumber == orderNumber).FirstOrDefault();
+            return _context.Orders.Where(o => o.OrderNumber == orderNumber)
+                .Include(o => o.CustomerApartment).ThenInclude(ca => ca.Customer)
+                .Include(o => o.CustomerCar).ThenInclude(cc => cc.Customer)
+                .Include(o =>o.Customer).ThenInclude(c => c.User)
+                .FirstOrDefault();
         }
 
         public ICollection<Status> GetStatuses()
