@@ -37,6 +37,8 @@ namespace FuelGo.Controllers
             }
             var customerMap = _mapper.Map<User>(register);
             customerMap.CreatedAt = DateTime.Now;
+            customerMap.UpdatedAt = DateTime.Now;
+            customerMap.IsNotDeleted = true;
             customerMap.Role = "Customer";
             if(!_unitOfWork._customerRepository.RegisterCustomer(customerMap))
             {
