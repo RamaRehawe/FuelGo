@@ -660,7 +660,7 @@ namespace FuelGo
             }
 
             // Retrieve required related records
-            var fuelType = dataContext.FuelTypes.FirstOrDefault(f => f.Name == "بنزين");
+            var fuelType = dataContext.FuelTypes.FirstOrDefault(f => f.Name == "مازوت");
 
             // Retrieve the pending order status ("قيد الانتظار") from order statuses
             var pendingOrderStatus = dataContext.Statuses
@@ -682,7 +682,7 @@ namespace FuelGo
                         CustomerLong = 36.2765,
                         LocationDescription = "شارع الحرية",
                         NeighborhoodId = 1, // Assumes neighborhood with ID=1 exists (e.g., "المزة" in دمشق)
-                        FuelTypeId = fuelType != null ? fuelType.Id : 1, // Default to 1 if not found
+                        FuelTypeId = fuelType != null ? fuelType.Id : 2, // Default to 1 if not found
                         OrderedQuantity = 100.0,
                         FinalQuantity = null,
                         FinalPrice = null,

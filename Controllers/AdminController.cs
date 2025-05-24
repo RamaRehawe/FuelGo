@@ -41,6 +41,7 @@ namespace FuelGo.Controllers
             driverMap.Password = "123456789";
             driverMap.CreatedAt = DateTime.Now;
             driverMap.UpdatedAt = DateTime.Now;
+            driverMap.IsNotDeleted = true;
             var adminId = _unitOfWork._adminRepository.GetAdminByUserId(base.GetActiveUser()!.Id).Id;
             var center = _unitOfWork._adminRepository.GetCenterByAdminId(adminId);
             var shift = (_unitOfWork._adminRepository.GetShifts().Where(s => s.Id == driverData.ShiftId).FirstOrDefault());

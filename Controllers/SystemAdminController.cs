@@ -40,6 +40,7 @@ namespace FuelGo.Controllers
             adminMap.Password = "123456789";
             adminMap.CreatedAt = DateTime.Now;
             adminMap.UpdatedAt = DateTime.Now;
+            adminMap.IsNotDeleted = true;
             if(!_unitOfWork._systemAdminRepository.AddAdmin(adminMap))
             {
                 ModelState.AddModelError("", "Somthing went wrong while saving");
