@@ -70,6 +70,19 @@ namespace FuelGo.Repository
                 .OrderBy(o => o.Id).ToList();
         }
 
+        public ICollection<Order> GetOrdersByCenterIdAndStatusId(int centerId, int statusId)
+        {
+            return _context.Orders.Where(o => o.Driver.CenterId == centerId && o.StatusId == statusId)
+                .Include(o => o.Neighborhood)
+                .Include(o => o.FuelType)
+                .Include(o => o.CustomerApartment)
+                .Include(o => o.CustomerCar)
+                .Include(o => o.Status)
+                .Include(o => o.Customer).ThenInclude(c => c.User)
+                .Include(o => o.Driver).ThenInclude(d => d.User)
+                .OrderBy(o => o.Id).ToList();
+        }
+
         public ICollection<Shift> GetShifts()
         {
             return _context.Shifts.OrderBy(s => s.Id).ToList();
