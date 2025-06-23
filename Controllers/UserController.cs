@@ -61,6 +61,16 @@ namespace FuelGo.Controllers
             return Ok("Password updated");
         }
 
+        [HttpGet("get-profile")]
+        [Authorize]
+        [ProducesResponseType(200)]
+        public IActionResult GetCustomerProfile()
+        {
+            var user = base.GetActiveUser()!;
+            var resUser = _mapper.Map<ResProfileDto>(user);
+            return Ok(resUser);
+
+        }
 
         private string GenerateJwtToken(string username, string role)
         {
