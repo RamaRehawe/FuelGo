@@ -120,21 +120,41 @@ namespace FuelGo.Controllers
         [HttpGet("get-orders-by-center")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(200)]
-        public IActionResult GetOrdersByCenter()
+        public IActionResult GetOrdersByCenter([FromQuery] int statusId)
         {
             var admin = _unitOfWork._adminRepository.GetAdminByUserId(base.GetActiveUser()!.Id);
-            var orders = _unitOfWork._adminRepository.GetOrdersByCenterId(admin.CenterId);
-            var resOrders = _mapper.Map<List<ResOrderDto>>(orders);
-            foreach (var dto in resOrders)
+            if(statusId == null || statusId == 0)
             {
-                var order = orders.FirstOrDefault(o => o.OrderNumber == dto.OrderNumber);
-                var fuel = _unitOfWork._adminRepository.GetFuelByCenterAndFuelId(admin.CenterId, order.FuelTypeId);
-                if (order.FinalQuantity.HasValue && fuel != null && order.FinalPrice.HasValue)
+                var orders = _unitOfWork._adminRepository.GetOrdersByCenterId(admin.CenterId);
+                var resOrders = _mapper.Map<List<ResOrderDto>>(orders);
+                foreach (var dto in resOrders)
                 {
-                    dto.DeliveryFee = (order.FinalQuantity * fuel.Price) - order.FinalPrice;
+                    var order = orders.FirstOrDefault(o => o.OrderNumber == dto.OrderNumber);
+                    var fuel = _unitOfWork._adminRepository.GetFuelByCenterAndFuelId(admin.CenterId, order.FuelTypeId);
+                    if (order.FinalQuantity.HasValue && fuel != null && order.FinalPrice.HasValue)
+                    {
+                        dto.DeliveryFee = (order.FinalQuantity * fuel.Price) - order.FinalPrice;
+                    }
                 }
+                return Ok(resOrders);
             }
-            return Ok(resOrders);
+            else
+            {
+                var orders = _unitOfWork._adminRepository.GetOrdersByCenterIdAndStatusId(admin.CenterId, statusId);
+                var resOrders = _mapper.Map<List<ResOrderDto>>(orders);
+                foreach (var dto in resOrders)
+                {
+                    var order = orders.FirstOrDefault(o => o.OrderNumber == dto.OrderNumber);
+                    var fuel = _unitOfWork._adminRepository.GetFuelByCenterAndFuelId(admin.CenterId, order.FuelTypeId);
+                    if (order.FinalQuantity.HasValue && fuel != null && order.FinalPrice.HasValue)
+                    {
+                        dto.DeliveryFee = (order.FinalQuantity * fuel.Price) - order.FinalPrice;
+                    }
+                }
+
+                return Ok(resOrders);
+            }
+
         }
 
         [HttpGet("get-drivers")]

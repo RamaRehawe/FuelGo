@@ -91,7 +91,7 @@ namespace FuelGo.Controllers
         public IActionResult GetOrders([FromQuery] int statusId)
         {
             
-            if(statusId == null)
+            if(statusId == null || statusId == 0)
             {
                 var orders = _unitOfWork._systemAdminRepository.GetOrders();
                 var resOrders = _mapper.Map<List<ResOrderDto>>(orders);
