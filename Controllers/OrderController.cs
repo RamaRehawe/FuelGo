@@ -160,6 +160,7 @@ namespace FuelGo.Controllers
         }
 
         [HttpGet("get-active-order-status")]
+        [Authorize(Roles = "Driver")]
         [ProducesResponseType(200)]
         public IActionResult GetActiveOrderStatus()
         {
