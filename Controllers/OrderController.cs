@@ -116,6 +116,7 @@ namespace FuelGo.Controllers
         }
 
         [HttpGet("track-order")]
+        [Authorize(Roles = "Customer")]
         [ProducesResponseType(200)]
         public IActionResult TrackOrder()
         {
@@ -131,6 +132,30 @@ namespace FuelGo.Controllers
             {
                 Status = status,
                 EstimatedDeliveryTime = estimatedTime?.ToString(@"hh\:mm\:ss") ?? "Calculating..."
+            });
+        }
+
+        [HttpGet("get-authcode")]
+        [Authorize(Roles = "Customer")]
+        [ProducesResponseType(200)]
+        public IActionResult GetAuthCode()
+        {
+            var userId = base.GetActiveUser()!.Id;
+            var customerId = _unitOfWork._orderRepository.GetCustomerId(userId);
+            var order = _unitOfWork._orderRepository.GetActiveOrderByCustomerId(customerId);
+            if(order == null)
+            {
+                return NotFound("No active order found.");
+            }
+            if (order.DriverId == null)
+                return NotFound("No driver yet.");
+            var driver = _unitOfWork._customerRepository.GetdriverById((int)order.DriverId);
+            var driverUser = _unitOfWork._customerRepository.GetUsers().Where(u => u.Id == driver.UserId).FirstOrDefault();
+            return Ok(new
+            {
+                AuthCode = order.AuthCode,
+                DriverName = driverUser.Name,
+                DriverPhone = driverUser.Phone
             });
         }
 
