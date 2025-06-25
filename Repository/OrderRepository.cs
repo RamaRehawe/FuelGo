@@ -68,9 +68,9 @@ namespace FuelGo.Repository
             return _context.FuelTypes.Where(f => f.Id == fuelTypeId).FirstOrDefault().Name;
         }
 
-        public double GetFuelPrice(int fuelTypeId)
+        public double GetFuelPrice(int fuelTypeId, int centerId)
         {
-            return _context.FuelDetails.Where(fd => fd.FuelTypeId == fuelTypeId).FirstOrDefault().Price;
+            return _context.FuelDetails.Where(fd => fd.FuelTypeId == fuelTypeId & fd.CenterId == centerId).FirstOrDefault().Price;
         }
 
         public string GetNeighborhoodName(int neighborhoodId)
