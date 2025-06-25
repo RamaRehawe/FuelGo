@@ -29,6 +29,24 @@ namespace FuelGo.Repository
             return Save();
         }
 
+        public bool AddFuelDetailsForCenter(int centerId)
+        {
+            FuelDetail fuelDetail1 = new FuelDetail {
+                FuelTypeId = 1,
+                CenterId = centerId,
+                Price = 0
+            };
+            FuelDetail fuelDetail2 = new FuelDetail
+            {
+                FuelTypeId = 2,
+                CenterId = centerId,
+                Price = 0
+            };
+            _context.Add(fuelDetail1);
+            _context.Add(fuelDetail2);
+            return Save();
+        }
+
         public Admin GetAdminById(int id)
         {
             return _context.Admins.Where(a => a.UserId == id).FirstOrDefault();
