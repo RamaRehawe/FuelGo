@@ -8,6 +8,7 @@ namespace FuelGo.Inerfaces
         Admin GetAdminById(int id);
         ICollection<Center> GetCenters();
         bool AddCenter(Center center);
+        bool AddFuelDetailsForCenter(int centerId);
         ICollection<Status> GetStatuses();
         void AddAdmin(Admin admin);
         ICollection<Order> GetOrdersByStatus(int statusId);

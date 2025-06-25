@@ -82,6 +82,11 @@ namespace FuelGo.Controllers
                 ModelState.AddModelError("", "Somthing went wrong while saving");
                 return StatusCode(500, ModelState);
             }
+            if(!_unitOfWork._systemAdminRepository.AddFuelDetailsForCenter(centerMap.Id))
+            {
+                ModelState.AddModelError("", "Somthing went wrong while saving with the fuel details.");
+                return StatusCode(500, ModelState);
+            }
             return Ok("Successfully added");
         }
 
