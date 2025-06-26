@@ -13,7 +13,7 @@ namespace FuelGo.Inerfaces
         string GetFuelName(int fuelTypeId);
         string GetCarBrand(int? carId);
         double GetConstant(string key);
-        double GetFuelPrice(int fuelTypeId);
+        double GetFuelPrice(int fuelTypeId, int centerId);
         Order GetOrder(string orderNumber);
         Truck GetTruck(int? truckId);
         Driver GetDriver(int userId);

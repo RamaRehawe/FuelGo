@@ -30,7 +30,8 @@ namespace FuelGo.Controllers
             var statusId = _unitOfWork._orderRepository.GetStatuses().Where(s => s.Name == "قيد الانتظار").FirstOrDefault().Id;
             var truck = _unitOfWork._orderRepository.GetTruck(
                 _unitOfWork._orderRepository.GetDriver(base.GetActiveUser()!.Id).TruckId);
-            var orders = _unitOfWork._driverRepository.GetPendingOrders(statusId)
+            var center = _unitOfWork._systemAdminRepository.GetCenters().Where(c => c.Id == truck.CenterId).FirstOrDefault();
+            var orders = _unitOfWork._driverRepository.GetPendingOrders(statusId, center)
                 .Where(o => o.FuelTypeId == truck.CargoTankTypeId && o.OrderedQuantity <= truck.CargoTankCapacity);
             var resOrders = _mapper.Map<List<ResPendingOrdersDto>>(orders);
             return Ok(resOrders);
@@ -78,7 +79,7 @@ namespace FuelGo.Controllers
             var driverId = _unitOfWork._orderRepository.GetDriverId(base.GetActiveUser()!.Id);
             var driver = _unitOfWork._orderRepository.GetDriver(base.GetActiveUser()!.Id);
             var truck = _unitOfWork._orderRepository.GetTruck(driver.TruckId);
-            var fuelPrice = _unitOfWork._orderRepository.GetFuelPrice(order.FuelTypeId);
+            var fuelPrice = _unitOfWork._orderRepository.GetFuelPrice(order.FuelTypeId, driver.CenterId);
             order.Price = (fuelPrice * order.OrderedQuantity) +
                 CalculateDeliveryPrice(order.CustomerLat, order.CustomerLong, truck.Lat, truck.Long,
                 order.OrderedQuantity);
@@ -156,7 +157,7 @@ namespace FuelGo.Controllers
             driver.StatusId = driverStatusId;
             order.FinalQuantity = quantity;
             order.StatusId = statusId;
-            var fuelPrice = _unitOfWork._orderRepository.GetFuelPrice(order.FuelTypeId);
+            var fuelPrice = _unitOfWork._orderRepository.GetFuelPrice(order.FuelTypeId, driver.CenterId);
             order.FinalPrice = (fuelPrice * quantity) +
                 CalculateDeliveryPrice(order.CustomerLat, order.CustomerLong, order.DriverLat, order.DriverLong, 
                 quantity);
