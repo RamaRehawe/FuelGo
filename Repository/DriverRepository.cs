@@ -40,11 +40,13 @@ namespace FuelGo.Repository
                 .ToList();
         }
 
-        public ICollection<Order> GetPendingOrders(int statusId)
+        public ICollection<Order> GetPendingOrders(int statusId, Center center)
         {
-            return _context.Orders.Where(o => o.StatusId == statusId)
+            var cityId = _context.Neighborhoods.Where(n => n.Id == center.NeighborhoodId).FirstOrDefault().CityId;
+            return _context.Orders.Where(o => o.StatusId == statusId && o.Neighborhood.CityId == cityId)
                 .Include(o => o.CustomerApartment)
                 .Include(o => o.CustomerCar)
+                .Include(o => o.Neighborhood)
                 .ToList();
         }
 
