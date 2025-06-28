@@ -11,9 +11,9 @@ namespace FuelGo.Repository
         {
         }
 
-        public ICollection<FuelDetail> GetFuelDetails()
+        public ICollection<FuelDetail> GetFuelDetailsByCenter(int centerId)
         {
-            return _context.FuelDetails
+            return _context.FuelDetails.Where(fd => fd.CenterId == centerId)
                 .Include(fd => fd.Center)
                 .Include(fd => fd.FuelType)
                 .ToList();

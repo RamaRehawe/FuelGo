@@ -4,6 +4,6 @@ namespace FuelGo.Inerfaces
 {
     public interface IFuelDetailsRepository : IBaseRepository
     {
-        ICollection<FuelDetail> GetFuelDetails();
+        ICollection<FuelDetail> GetFuelDetailsByCenter(int centerId);
     }
 }

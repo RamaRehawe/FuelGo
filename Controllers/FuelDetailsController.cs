@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FuelGo.Dto;
 using FuelGo.Inerfaces;
+using FuelGo.Models;
 using FuelGo.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,11 +17,13 @@ namespace FuelGo.Controllers
         {
             _mapper = mapper;
         }
-        [HttpGet("get-fuel-details")]
+        [HttpGet("get-fuel-details-by-center")]
         [ProducesResponseType(200)]
-        public IActionResult GetFuelDetails()
+        public IActionResult GetFuelDetailsByCenter()
         {
-            var fuelDeatails = _unitOfWork._fuelDetailsRepository.GetFuelDetails();
+            var admin = _unitOfWork._adminRepository.GetAdminByUserId(base.GetActiveUser()!.Id);
+            var center = _unitOfWork._adminRepository.GetCenterByAdminId(admin.Id);
+            var fuelDeatails = _unitOfWork._fuelDetailsRepository.GetFuelDetailsByCenter(center.Id);
             var resDetails = _mapper.Map<List<ResFuelDetailsDto>>(fuelDeatails);
             return Ok(resDetails);
         }
