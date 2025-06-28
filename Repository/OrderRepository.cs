@@ -37,6 +37,23 @@ namespace FuelGo.Repository
             return _context.CustomerCars.Where(cc => cc.Id == carId).FirstOrDefault().Brand;
         }
 
+        public Center GetCenterByCityId(int cityId)
+        {
+            return _context.Centers.Where(c => c.Neighborhood.CityId == cityId)
+                .Include(c => c.Neighborhood).ThenInclude(c => c.City)
+                .FirstOrDefault();
+                
+        }
+
+        public City GetCityByNeighborhood(int neighborhoodId)
+        {
+            return _context.Neighborhoods
+                .Include(n => n.City)
+                .Where(n => n.Id == neighborhoodId)
+                .Select(n => n.City)
+                .FirstOrDefault();
+        }
+
         public string GetCityName(int neighborhoodId)
         {
             var neighborhood = _context.Neighborhoods.Where(n => n.Id == neighborhoodId).FirstOrDefault();
