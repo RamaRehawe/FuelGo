@@ -13,5 +13,7 @@ namespace FuelGo.Dto
         public double OrderedQuantity { get; set; }
         public string StatusName { get; set; }
         public CustomerApartment Apartment { get; set; }
+        public double? TotalPrice { get; set; }
+        public double Fee { get; set; }
     }
 }

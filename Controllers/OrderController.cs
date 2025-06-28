@@ -43,7 +43,12 @@ namespace FuelGo.Controllers
             orderMap.StatusId = statusId;
             orderMap.IsActive = true;
             orderMap.AuthCode = GenerateRandomCode(10);
-            
+            var center = _unitOfWork._orderRepository.GetCenterByCityId(orderData.CityId);
+            var fuelPrice = _unitOfWork._orderRepository.GetFuelPrice(orderMap.FuelTypeId, center.Id);
+            var fee = CalculateDeliveryPrice(orderMap.CustomerLat, orderMap.CustomerLong, center.Lat, center.Long,
+                orderMap.OrderedQuantity); ;
+            orderMap.Price = (fuelPrice * orderMap.OrderedQuantity) + fee;
+
             if (!_unitOfWork._orderRepository.AddOrder(orderMap))
             {
                 ModelState.AddModelError("", "Somthing went wrong while saving");
@@ -64,7 +69,9 @@ namespace FuelGo.Controllers
                 FuelTypeName = fuelName,
                 OrderedQuantity = orderMap.OrderedQuantity,
                 CustomerCarBrand = carBrand,
-                StatusName = "قيد الانتظار"
+                StatusName = "قيد الانتظار",
+                TotalPrice = orderMap.Price,
+                Fee = fee
             };
             return Ok(resOrder);
         }
@@ -92,6 +99,12 @@ namespace FuelGo.Controllers
             orderMap.IsActive = true;
             orderMap.AuthCode = GenerateRandomCode(10);
 
+            var city = _unitOfWork._orderRepository.GetCityByNeighborhood(apt.NeighborhoodId);
+            var center = _unitOfWork._orderRepository.GetCenterByCityId(city.Id);
+            var fuelPrice = _unitOfWork._orderRepository.GetFuelPrice(orderMap.FuelTypeId, center.Id);
+            var fee = CalculateDeliveryPrice(orderMap.CustomerLat, orderMap.CustomerLong, center.Lat, center.Long,
+                orderMap.OrderedQuantity); ;
+            orderMap.Price = (fuelPrice * orderMap.OrderedQuantity) + fee;
             if (!_unitOfWork._orderRepository.AddOrder(orderMap))
             {
                 ModelState.AddModelError("", "Somthing went wrong while saving");
@@ -110,7 +123,9 @@ namespace FuelGo.Controllers
                 FuelTypeName = fuelName,
                 OrderedQuantity = orderMap.OrderedQuantity,
                 StatusName = "قيد الانتظار",
-                Apartment = apt
+                Apartment = apt,
+                TotalPrice = orderMap.Price,
+                Fee = fee
             };
             return Ok(resOrder);
         }

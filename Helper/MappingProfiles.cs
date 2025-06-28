@@ -123,6 +123,7 @@ namespace FuelGo.Helper
 
             CreateMap<Order, ReqGetOrdersDto>().ReverseMap();
             CreateMap<User, ResProfileDto>().ReverseMap();
+            CreateMap<User, ResProfileDto>().ReverseMap();
         }
     }
 }
