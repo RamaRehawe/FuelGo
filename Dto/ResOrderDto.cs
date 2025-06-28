@@ -20,5 +20,6 @@
         public string? DriverName { get; set; }
         public string? DriverPhone { get; set; }
         public double? DeliveryFee { get; set; }
+        public string CenterName { get; set; }
     }
 }

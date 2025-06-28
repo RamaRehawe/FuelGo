@@ -78,6 +78,7 @@ namespace FuelGo.Repository
                 .Include(o => o.FuelType)
                 .Include(o => o.CustomerApartment)
                 .Include(o => o.CustomerCar)
+                .Include(o => o.Driver).ThenInclude(d => d.Center)
                 .ToList();
         }
 

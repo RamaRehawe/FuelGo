@@ -63,7 +63,8 @@ namespace FuelGo.Helper
                 .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer.User.Name))
                 .ForMember(dest => dest.CustomerPhone, opt => opt.MapFrom(src => src.Customer.User.Phone))
                 .ForMember(dest => dest.DriverName, opt => opt.MapFrom(src => src.Driver != null ? src.Driver.User.Name : null))
-                .ForMember(dest => dest.DriverPhone, opt => opt.MapFrom(src => src.Driver != null ? src.Driver.User.Phone : null));
+                .ForMember(dest => dest.DriverPhone, opt => opt.MapFrom(src => src.Driver != null ? src.Driver.User.Phone : null))
+                .ForMember(dest => dest.CenterName, opt => opt.MapFrom(src => src.Driver != null ? src.Driver.Center.Name : null));
 
             CreateMap<Customer, ResPropretiesDto>().ReverseMap();
             
