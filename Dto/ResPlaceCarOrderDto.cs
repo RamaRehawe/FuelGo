@@ -11,6 +11,7 @@
         public double OrderedQuantity { get; set; }
         public string CustomerCarBrand { get; set; }
         public string StatusName { get; set; }
+        public int StatusId { get; set; }
         public double? TotalPrice { get; set; }
         public double Fee { get; set; }
     }

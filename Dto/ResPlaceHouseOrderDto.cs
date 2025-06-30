@@ -12,6 +12,7 @@ namespace FuelGo.Dto
         public string FuelTypeName { get; set; }
         public double OrderedQuantity { get; set; }
         public string StatusName { get; set; }
+        public int StatusId { get; set; }
         public CustomerApartment Apartment { get; set; }
         public double? TotalPrice { get; set; }
         public double Fee { get; set; }

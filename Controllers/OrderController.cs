@@ -70,6 +70,7 @@ namespace FuelGo.Controllers
                 OrderedQuantity = orderMap.OrderedQuantity,
                 CustomerCarBrand = carBrand,
                 StatusName = "قيد الانتظار",
+                StatusId = orderMap.StatusId,
                 TotalPrice = orderMap.Price,
                 Fee = fee
             };
@@ -123,6 +124,7 @@ namespace FuelGo.Controllers
                 FuelTypeName = fuelName,
                 OrderedQuantity = orderMap.OrderedQuantity,
                 StatusName = "قيد الانتظار",
+                StatusId = orderMap.StatusId,
                 Apartment = apt,
                 TotalPrice = orderMap.Price,
                 Fee = fee
@@ -142,10 +144,13 @@ namespace FuelGo.Controllers
                 return NotFound("No active order found.");
             var status = _unitOfWork._orderRepository.GetStatuses()
                   .FirstOrDefault(o => o.Id == order.StatusId)?.Name;
+            var statusId = _unitOfWork._orderRepository.GetStatuses()
+                  .FirstOrDefault(o => o.Id == order.StatusId)?.Id;
             TimeSpan? estimatedTime = CalculateEstimatedTime(order);
             return Ok(new
             {
                 Status = status,
+                StatusId = statusId,
                 EstimatedDeliveryTime = estimatedTime?.ToString(@"hh\:mm\:ss") ?? "Calculating..."
             });
         }
