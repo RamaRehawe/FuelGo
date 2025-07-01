@@ -251,9 +251,6 @@ namespace FuelGo
                 {
                     new Center { Name = "مركز دمشق", Phone = "0111234567", Lat = 33.5138, Long = 36.2765, LocationDescription = "قرب ساحة الأمويين", NeighborhoodId = 1 },
                     new Center { Name = "مركز حلب", Phone = "0219876543", Lat = 36.2021, Long = 37.1343, LocationDescription = "جانب القلعة", NeighborhoodId = 6 },
-                    new Center { Name = "مركز حمص", Phone = "0314567890", Lat = 34.7324, Long = 36.7139, LocationDescription = "شارع الدبلان", NeighborhoodId = 11 },
-                    new Center { Name = "مركز حماة", Phone = "0331122334", Lat = 35.1379, Long = 36.7518, LocationDescription = "جانب السوق المركزي", NeighborhoodId = 16 },
-                    new Center { Name = "مركز اللاذقية", Phone = "0415566778", Lat = 35.5258, Long = 35.7822, LocationDescription = "بالقرب من الكورنيش الجنوبي", NeighborhoodId = 21 },
                 };
 
                 dataContext.Centers.AddRange(centers);
@@ -268,7 +265,7 @@ namespace FuelGo
                     {
                         CenterId = 1,
                         PlateNumber = "ABC-123",
-                        Lat = 33.5138,
+                        Lat =  33.5138,
                         Long = 36.2765,
                         FuelTankCapacity = 5000,
                         CargoTankCapacity = 3000,
@@ -277,10 +274,23 @@ namespace FuelGo
                         FuelTankTypeId = 1,    // assuming type id exists
                         CargoTankTypeId = 2
                     },
+                     new Truck
+                    {
+                        CenterId = 1,
+                        PlateNumber = "ABC-456",
+                        Lat = 33.5138,
+                        Long = 36.2765,
+                        FuelTankCapacity = 5000,
+                        CargoTankCapacity = 3000,
+                        FuelTankFullCapacity = 5000,
+                        CargoTankFullCapacity = 3000,
+                        FuelTankTypeId = 1,    // assuming type id exists
+                        CargoTankTypeId = 1
+                    },
                     new Truck
                     {
                         CenterId = 2,
-                        PlateNumber = "XYZ-789",
+                        PlateNumber = "XYZ-123",
                         Lat = 36.2021,
                         Long = 37.1343,
                         FuelTankCapacity = 6000,
@@ -289,6 +299,19 @@ namespace FuelGo
                         CargoTankFullCapacity = 3500,
                         FuelTankTypeId = 1,
                         CargoTankTypeId = 2
+                    },
+                    new Truck
+                    {
+                        CenterId = 2,
+                        PlateNumber = "XYZ-456",
+                        Lat = 36.2021,
+                        Long = 37.1343,
+                        FuelTankCapacity = 6000,
+                        CargoTankCapacity = 3500,
+                        FuelTankFullCapacity = 6000,
+                        CargoTankFullCapacity = 3500,
+                        FuelTankTypeId = 1,
+                        CargoTankTypeId = 1
                     }
                 };
 
@@ -538,8 +561,20 @@ namespace FuelGo
                     new FuelDetail
                     {
                         FuelTypeId = 2,  // e.g., مازوت
-                        CenterId = 2,
+                        CenterId = 1,
                         Price = 9000
+                    },
+                    new FuelDetail
+                    {
+                        FuelTypeId = 1,  // e.g., بنزين
+                        CenterId = 2,    // a valid center id
+                        Price = 120000     // example price
+                    },
+                    new FuelDetail
+                    {
+                        FuelTypeId = 2,  // e.g., مازوت
+                        CenterId = 2,
+                        Price = 90000
                     }
                 };
 
@@ -656,99 +691,6 @@ namespace FuelGo
                 };
 
                 dataContext.WalletTransactions.AddRange(walletTransactions);
-                dataContext.SaveChanges();
-            }
-
-            // Retrieve required related records
-            var fuelType = dataContext.FuelTypes.FirstOrDefault(f => f.Name == "مازوت");
-
-            // Retrieve the pending order status ("قيد الانتظار") from order statuses
-            var pendingOrderStatus = dataContext.Statuses
-                .FirstOrDefault(s => s.Name == "قيد الانتظار" && s.StatusTypeId == orderType.Id);
-
-            // Retrieve an existing customer apartment record (seeded earlier)
-            var customerApartment = dataContext.CustomerApartments.FirstOrDefault();
-
-            // Seeding Orders
-            if (!dataContext.Orders.Any())
-            {
-                var orders = new List<Order>
-                {
-                    new Order
-                    {
-                        Date = DateTime.UtcNow,
-                        OrderNumber = "ORD-1001",
-                        CustomerLat = 33.5138,
-                        CustomerLong = 36.2765,
-                        LocationDescription = "شارع الحرية",
-                        NeighborhoodId = 1, // Assumes neighborhood with ID=1 exists (e.g., "المزة" in دمشق)
-                        FuelTypeId = fuelType != null ? fuelType.Id : 2, // Default to 1 if not found
-                        OrderedQuantity = 100.0,
-                        FinalQuantity = null,
-                        FinalPrice = null,
-                        IsItUrgent = false,
-                        CustomerCarId = null,              // Leave null if no car is selected
-                        CustomerApartmentId = customerApartment != null ? customerApartment.Id : (int?)null,
-                        CustomerId = customerRecord != null ? customerRecord.Id : 1,
-                        DriverId = null,                   // No driver assigned yet
-                        StatusId = pendingOrderStatus != null ? pendingOrderStatus.Id : 1, // Default to 1 if not found
-                        IsActive = true,
-                        AuthCode = "AUTH1234"
-                    }
-                };
-
-                dataContext.Orders.AddRange(orders);
-                dataContext.SaveChanges();
-            }
-
-
-            // Retrieve required entities for TruckTankRefills and TruckHandovers
-            var truckForRefill = dataContext.Trucks.FirstOrDefault(t => t.PlateNumber == "ABC-123");
-            var gasStation = dataContext.GasStations.FirstOrDefault(); // Gets the first seeded gas station
-            var driverUser = dataContext.Users.FirstOrDefault(u => u.Email == "driver@fuelgo.sy");
-            var driverRecord = dataContext.Drivers.FirstOrDefault(d => d.UserId == driverUser.Id);
-            var adminUser = dataContext.Users.FirstOrDefault(u => u.Email == "admin@fuelgo.sy");
-            var adminRecord = dataContext.Admins.FirstOrDefault(a => a.UserId == adminUser.Id);
-
-            // Seeding TruckTankRefills
-            if (!dataContext.TruckTankRefills.Any() && truckForRefill != null && gasStation != null && driverRecord != null)
-            {
-                var truckTankRefills = new List<TruckTankRefill>
-                {
-                    new TruckTankRefill
-                    {
-                        TruckId = truckForRefill.Id,
-                        QuantityCargoRefill = 500.0,
-                        QuantityFuelRefill = 300.0,
-                        Price = 150.0,
-                        GasStationId = gasStation.Id,
-                        DriverId = driverRecord.Id
-                    }
-                };
-
-                dataContext.TruckTankRefills.AddRange(truckTankRefills);
-                dataContext.SaveChanges();
-            }
-
-            // Seeding TruckHandovers
-            if (!dataContext.TruckHandovers.Any() && truckForRefill != null && driverRecord != null && adminRecord != null)
-            {
-                var truckHandovers = new List<TruckHandover>
-                {
-                    new TruckHandover
-                    {
-                        TruckId = truckForRefill.Id,
-                        CargoQuantity = 250.0,
-                        FuelQuantity = 150.0,
-                        CargoVarience = 5.0,
-                        FuelVarience = 3.0,
-                        Money = 100.0,
-                        DriverId = driverRecord.Id,
-                        AdminId = adminRecord.Id
-                    }
-                };
-
-                dataContext.TruckHandovers.AddRange(truckHandovers);
                 dataContext.SaveChanges();
             }
 
