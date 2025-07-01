@@ -27,5 +27,14 @@ namespace FuelGo.Controllers
             var resDetails = _mapper.Map<List<ResFuelDetailsDto>>(fuelDeatails);
             return Ok(resDetails);
         }
+
+        [HttpGet("get-fuel-details")]
+        [ProducesResponseType(200)]
+        public IActionResult GetFuelDetails()
+        {
+            var fuelDeatails = _unitOfWork._fuelDetailsRepository.GetFuelDetails();
+            var resDetails = _mapper.Map<List<ResFuelDetailsDto>>(fuelDeatails);
+            return Ok(resDetails);
+        }
     }
 }

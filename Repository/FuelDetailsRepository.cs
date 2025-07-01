@@ -18,5 +18,12 @@ namespace FuelGo.Repository
                 .Include(fd => fd.FuelType)
                 .ToList();
         }
+        public ICollection<FuelDetail> GetFuelDetails()
+        {
+            return _context.FuelDetails
+                .Include(fd => fd.Center)
+                .Include(fd => fd.FuelType)
+                .ToList();
+        }
     }
 }
