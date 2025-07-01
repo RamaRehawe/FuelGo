@@ -42,5 +42,24 @@ namespace FuelGo.Controllers
             var values = _unitOfWork._constantDictionaryRepository.GetConstantDictionaries();
             return Ok(values);
         }
+
+        [HttpPost("calculate-payment")]
+        [ProducesResponseType(200)]
+        public IActionResult CalculatePayment(ReqCalcPaymentDto data)
+        {
+            var values = _unitOfWork._constantDictionaryRepository.GetConstantDictionaries();
+            var center = _unitOfWork._orderRepository.GetCenterByCityId(data.CityId);
+            var fuelPrice = _unitOfWork._orderRepository.GetFuelPrice(data.FuelTypeId, center.Id);
+            var fee = CalculateDeliveryPrice(data.CustomerLat, data.CustomerLong, center.Lat, center.Long,
+                data.Quantity);
+            var payment = fuelPrice * data.Quantity;
+
+            return Ok(new
+            {
+                FuelPrice = payment,
+                Fee = fee,
+                Total = payment + fee
+            });
+        }
     }
 }
