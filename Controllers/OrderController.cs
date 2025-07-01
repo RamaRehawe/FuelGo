@@ -173,7 +173,11 @@ namespace FuelGo.Controllers
             var driverUser = _unitOfWork._customerRepository.GetUsers().Where(u => u.Id == driver.UserId).FirstOrDefault();
             return Ok(new
             {
-                AuthCode = order.AuthCode,
+                authCode = order.AuthCode,
+                orderNumber = order.OrderNumber,
+                Quantity = order.OrderedQuantity,
+                fuelTypeId = order.FuelTypeId,
+                fuelTypeName = order.FuelType.Name,
                 DriverName = driverUser.Name,
                 DriverPhone = driverUser.Phone
             });

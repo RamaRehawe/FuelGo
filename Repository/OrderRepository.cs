@@ -19,7 +19,9 @@ namespace FuelGo.Repository
 
         public Order GetActiveOrderByCustomerId(int customerId)
         {
-            return _context.Orders.Where(o => o.IsActive == true && o.CustomerId == customerId).FirstOrDefault();
+            return _context.Orders.Where(o => o.IsActive == true && o.CustomerId == customerId)
+                .Include(o => o.FuelType)
+                .FirstOrDefault();
         }
 
         public Order GetActiveOrderByDriverId(int driverId)
@@ -87,7 +89,7 @@ namespace FuelGo.Repository
 
         public double GetFuelPrice(int fuelTypeId, int centerId)
         {
-            return _context.FuelDetails.Where(fd => fd.FuelTypeId == fuelTypeId & fd.CenterId == centerId).FirstOrDefault().Price;
+            return _context.FuelDetails.Where(fd => fd.FuelTypeId == fuelTypeId && fd.CenterId == centerId).FirstOrDefault().Price;
         }
 
         public string GetNeighborhoodName(int neighborhoodId)
