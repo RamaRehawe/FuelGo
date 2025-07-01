@@ -46,7 +46,7 @@ namespace FuelGo.Controllers
             var center = _unitOfWork._orderRepository.GetCenterByCityId(orderData.CityId);
             var fuelPrice = _unitOfWork._orderRepository.GetFuelPrice(orderMap.FuelTypeId, center.Id);
             var fee = CalculateDeliveryPrice(orderMap.CustomerLat, orderMap.CustomerLong, center.Lat, center.Long,
-                orderMap.OrderedQuantity); ;
+                orderMap.OrderedQuantity);
             orderMap.Price = (fuelPrice * orderMap.OrderedQuantity) + fee;
 
             if (!_unitOfWork._orderRepository.AddOrder(orderMap))

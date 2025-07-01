@@ -122,8 +122,19 @@ namespace FuelGo.Helper
             CreateMap<Status, ResStatusDto>().ReverseMap();
 
             CreateMap<Order, ReqGetOrdersDto>().ReverseMap();
+
             CreateMap<User, ResProfileDto>().ReverseMap();
+
             CreateMap<User, ResProfileDto>().ReverseMap();
+
+            CreateMap<FuelDetail, ReqCalcPaymentDto>()
+                .ForMember(dest => dest.CityId, opt => opt.MapFrom(src => src.Center.Neighborhood.City.Id))
+                .ForMember(dest => dest.FuelTypeId, opt => opt.MapFrom(src => src.FuelTypeId))
+                .ForMember(dest => dest.Quantity, opt => opt.Ignore()) // هذا من الطلب مش من FuelDetail
+                .ReverseMap()
+                .ForMember(dest => dest.Center, opt => opt.Ignore()) // تجنب التعديل على navigation property
+                .ForMember(dest => dest.FuelType, opt => opt.Ignore());
+
         }
     }
 }
