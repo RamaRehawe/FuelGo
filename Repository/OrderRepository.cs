@@ -39,9 +39,9 @@ namespace FuelGo.Repository
             return _context.CustomerCars.Where(cc => cc.Id == carId).FirstOrDefault().Brand;
         }
 
-        public Center GetCenterByCityId(int cityId)
+        public Center GetCenterByCityId(int cityId, int? neighborhoodId = null)
         {
-            return _context.Centers.Where(c => c.Neighborhood.CityId == cityId)
+            return _context.Centers.Where(c => c.Neighborhood.CityId == cityId && (c.NeighborhoodId == neighborhoodId || neighborhoodId == null))
                 .Include(c => c.Neighborhood).ThenInclude(c => c.City)
                 .FirstOrDefault();
                 

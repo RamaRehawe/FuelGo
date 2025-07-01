@@ -43,7 +43,7 @@ namespace FuelGo.Controllers
             orderMap.StatusId = statusId;
             orderMap.IsActive = true;
             orderMap.AuthCode = GenerateRandomCode(10);
-            var center = _unitOfWork._orderRepository.GetCenterByCityId(orderData.CityId);
+            var center = _unitOfWork._orderRepository.GetCenterByCityId(orderData.CityId, orderData.NeighborhoodId);
             var fuelPrice = _unitOfWork._orderRepository.GetFuelPrice(orderMap.FuelTypeId, center.Id);
             var fee = CalculateDeliveryPrice(orderMap.CustomerLat, orderMap.CustomerLong, center.Lat, center.Long,
                 orderMap.OrderedQuantity);

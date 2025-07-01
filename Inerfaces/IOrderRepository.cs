@@ -21,7 +21,7 @@ namespace FuelGo.Inerfaces
         Order GetActiveOrderByCustomerId(int customerId);
         Order GetActiveOrderByDriverId(int driverId);
         CustomerApartment GetApartmentById(int? id);
-        Center GetCenterByCityId(int cityId);
+        Center GetCenterByCityId(int cityId, int? neighborhoodId = null);
         City GetCityByNeighborhood(int neighborhoodId);
     }
 }
